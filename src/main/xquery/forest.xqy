@@ -6,44 +6,42 @@ declare namespace m = "http://marklogic.com/manage/meters";
 
 declare variable $uri := xdmp:get-request-field("uri"); (: TODO :)
 declare variable $doc := fn:doc($uri);
-(:
-declare variable $range-query := cts:element-range-query(xs:QName("m:start-time"), "=", xs:dateTime($start-time));
-range indexes needed:
-
-
-meters:start-time (dateTime) :)
-
 
 declare function local:process-row($i) {
 (:$i//m:start-time,
   $i//m:list-cache-hits,
   $i//m:list-cache-misses :)
-    element table { attribute class {"table table-striped"},
+    element table { attribute class {"table table-striped table-bordered"},
+        element thead { attribute class {"thead-dark"},
+        element tr {for $i in ( "Name", "LC Hits", "LC Misses", "CTC Hits", "CTC Misses", "Write Lock Count", "Deadlock Count", "Fragments [A/D]") return element th {$i}}
+        },
     (: "Start Time", "End Time", :)
-        element tr {for $i in ( "Name", "LC Hits", "LC Misses", "CTC Hits", "CTC Misses", "Write Lock Count", "Deadlock Count", "Fragments [A/D]") return element th {$i}},
+
         local:process-forest-status-elements($i)
     }
 };
 
 declare function local:process-forest-status-elements($i) {
-    for $j in $i/m:forest-status
-    return
-        element tr {
+    element tbody {
+        for $j in $i/m:forest-status
+        return
+            element tr {
             (: )element td {fn:data($j/m:start-time)},
         element td {fn:data($j/m:end-time)}, :)
-        element td {fn:data($j/m:forest-name)},
-        element td {fn:string($j/m:list-cache-hits) || " / " || fn:string($j/m:list-cache-hit-rate)},
-        element td {fn:string($j/m:list-cache-misses) || " / " || fn:string($j/m:list-cache-miss-rate)},
-        element td {fn:string($j/m:compressed-tree-cache-hits) || " / " || fn:string($j/m:compressed-tree-cache-hit-rate)},
-        element td {fn:string($j/m:compressed-tree-cache-misses) || " / " || fn:string($j/m:compressed-tree-cache-miss-rate)},
-        element td {fn:string($j/m:write-lock-count)},
-        element td {fn:string($j/m:deadlock-count)},
-        element td {fn:string($j/m:active-fragment-count) || " / " ||  fn:string($j/m:deleted-fragment-count)}
-}
+                element td {fn:data($j/m:forest-name)},
+                element td {fn:string($j/m:list-cache-hits) || " / " || fn:string($j/m:list-cache-hit-rate)},
+                element td {fn:string($j/m:list-cache-misses) || " / " || fn:string($j/m:list-cache-miss-rate)},
+                element td {fn:string($j/m:compressed-tree-cache-hits) || " / " || fn:string($j/m:compressed-tree-cache-hit-rate)},
+                element td {fn:string($j/m:compressed-tree-cache-misses) || " / " || fn:string($j/m:compressed-tree-cache-miss-rate)},
+                element td {fn:string($j/m:write-lock-count)},
+                element td {fn:string($j/m:deadlock-count)},
+                element td {fn:string($j/m:active-fragment-count) || " / " || fn:string($j/m:deleted-fragment-count)}
+            }
+    }
 };
 
 
-lib-bootstrap:create-starter-template("test",
+lib-bootstrap:create-starter-template("Forest status for host: "|| fn:string($doc//m:host-name),
         lib-bootstrap:bootstrap-container(
                 (
                     lib-bootstrap:display-with-muted-text(4, "Meters File URI: ", $uri),

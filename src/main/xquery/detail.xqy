@@ -23,17 +23,18 @@ declare function local:process-link($i) {
         else (element li {$uri})
 };
 
-lib-bootstrap:create-starter-template("test",
+lib-bootstrap:create-starter-template("Details for Start Time: "||$start-time,
         lib-bootstrap:bootstrap-container(
                 (
                     lib-bootstrap:display-with-muted-text(4, "Start Time: ", $start-time),
                     lib-bootstrap:display-with-muted-text(5, "Matches for this Start time: ", xs:string(xdmp:estimate(cts:search(doc(), $range-query)))),
                 (:)element h3 {"Start Time:", element small {$start-time}} :)
 
-                    element ul {
-                        for $i in cts:search(doc(), $range-query)
-                        return local:process-link ($i)
-                    }
+                    for $i in cts:element-values(xs:QName("m:host-name"))
+                    return lib-bootstrap:card-with-header($i, element ul {
+                        for $j in cts:search(doc(), cts:and-query( ($range-query, cts:element-value-query(xs:QName("m:host-name"), $i))) )
+                        return local:process-link ($j)
+                    })
 
                 )
         )
