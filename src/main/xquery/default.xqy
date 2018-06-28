@@ -4,11 +4,6 @@ import module namespace lib-bootstrap = "http://www.xmlmachines.com/lib-bootstra
 
 declare namespace m = "http://marklogic.com/manage/meters";
 
-
-(:
-range indexes needed:
-
-meters:start-time (dateTime) :)
 lib-bootstrap:create-starter-template("test",
     lib-bootstrap:bootstrap-container(
         (element h3 {"Start Times"},

@@ -6,13 +6,6 @@ declare namespace m = "http://marklogic.com/manage/meters";
 
 declare variable $start-time := xdmp:get-request-field("st", xs:string(cts:element-values(xs:QName("m:start-time"), (), ("limit=1"))));
 declare variable $range-query := cts:element-range-query(xs:QName("m:start-time"), "=", xs:dateTime($start-time));
-(:
-
-range indexes needed:
-
-
-meters:start-time (dateTime) :)
-
 
 declare function local:process-link($i) {
     let $uri := xdmp:node-uri($i)
