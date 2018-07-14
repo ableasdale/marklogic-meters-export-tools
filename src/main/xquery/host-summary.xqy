@@ -11,13 +11,13 @@ declare function local:get-doc-for-time($start-time){
             cts:element-range-query(xs:QName("m:start-time"), "=", $start-time),
             cts:element-value-query(xs:QName("m:host-name"), $hostname)
         ))
-    )
+    )[1]
 };
 
 declare function local:output-if-available($node){
     if(exists($node))
-    then element td {$node}
-    else element td {"N/A"}
+    then element td {fn:string($node)}
+    else element td {attribute class {"text-muted"}, "N/A"}
 };
 
 declare function local:process-start-times($start-times) {
@@ -26,10 +26,11 @@ declare function local:process-start-times($start-times) {
         let $k := local:get-doc-for-time($start-time)
         return
             element tr {
-                element td {$start-time},
-                element td {fn:data($k/m:host-status/m:total-cpu-stat-iowait)},
+                element td {element a {attribute href {"/host.xqy?uri="||fn:base-uri($k)},$start-time}},
+                local:output-if-available($k/m:host-status/m:total-cpu-stat-iowait),
                 local:output-if-available($k/m:host-status/m:memory-process-size),
                 local:output-if-available($k/m:host-status/m:memory-process-rss),
+                local:output-if-available($k/m:host-status/m:memory-process-rss-hwm),
                 local:output-if-available($k/m:host-status/m:memory-process-anon),
                 local:output-if-available($k/m:host-status/m:write-lock-rate),
                 local:output-if-available($k/m:host-status/m:total-cpu-stat-user),
@@ -37,8 +38,9 @@ declare function local:process-start-times($start-times) {
                 local:output-if-available($k/m:host-status/m:memory-system-swapin-rate),
                 local:output-if-available($k/m:host-status/m:memory-system-swapout-rate),
                 local:output-if-available($k/m:host-status/m:read-lock-count),
-                local:output-if-available($k/m:host-status/m:read-lock-rate)
-
+                local:output-if-available($k/m:host-status/m:read-lock-rate),
+                local:output-if-available($k/m:host-status/m:deadlock-count),
+                local:output-if-available($k/m:host-status/m:deadlock-rate)
                 (: element td {fn:string($k/m:host-status/m:memory-process-size) || " / " || fn:string($k//m:host-statuses/m:host-status/m:memory-process-rss)}:)
             }
     }
@@ -49,7 +51,7 @@ declare function local:table($start-times) {
   $i//m:list-cache-misses :)
     element table { attribute class {"table table-striped table-bordered"},
         element thead { attribute class {"thead-dark"},
-            element tr {for $i in ( "Time", "IOWait", "MPS", "RSS", "Anon", "Write Lock Rate", "User", "System", "SI", "SO", "RLC", "RLR") return element th {$i}}
+            element tr {for $i in ( "Time", "IOWait", "MPS", "RSS", "RSS-HWM", "Anon", <abbr title="Write Lock Rate">WLR</abbr>, <abbr title="User CPU Utilisation (%)">Usr</abbr>, <abbr title="System CPU Utilisation (%)">Sys</abbr>, <abbr title="System Swap-In Rate">SI</abbr>, <abbr title="System Swap-Out Rate">SO</abbr>, <abbr title="Read Lock Count">RLC</abbr>, <abbr title="Read Lock Rate">RLR</abbr>, <abbr title="Deadlock Count">DLC</abbr>, <abbr title="Deadlock Rate">DLR</abbr>) return element th {$i}}
         },
     (: "Start Time", "End Time", :)
 
@@ -58,7 +60,7 @@ declare function local:table($start-times) {
 };
 
 
-lib-bootstrap:create-starter-template("test",
+lib-bootstrap:create-starter-template("Host Summary: "||$hostname,
     lib-bootstrap:bootstrap-container(
         (element h3 {$hostname},
             local:table(cts:element-values(xs:QName("m:start-time"))
