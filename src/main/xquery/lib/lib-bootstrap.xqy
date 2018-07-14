@@ -33,7 +33,7 @@ declare function lib-bootstrap:create-starter-template($title as xs:string, $con
 };
 
 declare function lib-bootstrap:bootstrap-container($content as item()*) {
-element div { attribute class {"container"}, $content }
+element div { attribute class {"container-fluid"}, $content }
 };
 
 declare function lib-bootstrap:display-with-muted-text($size as xs:int, $main as xs:string, $sub as xs:string) as element() {

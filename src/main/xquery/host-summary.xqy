@@ -31,7 +31,14 @@ declare function local:process-start-times($start-times) {
                 local:output-if-available($k/m:host-status/m:memory-process-size),
                 local:output-if-available($k/m:host-status/m:memory-process-rss),
                 local:output-if-available($k/m:host-status/m:memory-process-anon),
-                local:output-if-available($k/m:host-status/m:write-lock-rate)
+                local:output-if-available($k/m:host-status/m:write-lock-rate),
+                local:output-if-available($k/m:host-status/m:total-cpu-stat-user),
+                local:output-if-available($k/m:host-status/m:total-cpu-stat-system),
+                local:output-if-available($k/m:host-status/m:memory-system-swapin-rate),
+                local:output-if-available($k/m:host-status/m:memory-system-swapout-rate),
+                local:output-if-available($k/m:host-status/m:read-lock-count),
+                local:output-if-available($k/m:host-status/m:read-lock-rate)
+
                 (: element td {fn:string($k/m:host-status/m:memory-process-size) || " / " || fn:string($k//m:host-statuses/m:host-status/m:memory-process-rss)}:)
             }
     }
@@ -42,7 +49,7 @@ declare function local:table($start-times) {
   $i//m:list-cache-misses :)
     element table { attribute class {"table table-striped table-bordered"},
         element thead { attribute class {"thead-dark"},
-            element tr {for $i in ( "Time", "IOWait", "MPS", "RSS", "Anon", "Write Lock Rate", "Deadlock Count", "Fragments [A/D]") return element th {$i}}
+            element tr {for $i in ( "Time", "IOWait", "MPS", "RSS", "Anon", "Write Lock Rate", "User", "System", "SI", "SO", "RLC", "RLR") return element th {$i}}
         },
     (: "Start Time", "End Time", :)
 
