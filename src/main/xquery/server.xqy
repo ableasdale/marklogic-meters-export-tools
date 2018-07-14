@@ -50,11 +50,10 @@ declare function local:process-server-status-elements($i) {
 lib-bootstrap:create-starter-template("Server status for host: "|| fn:string($doc//m:host-name),
         lib-bootstrap:bootstrap-container(
                 (
-                    lib-bootstrap:display-with-muted-text(4, "Meters File URI: ", $uri),
-                    lib-bootstrap:display-with-muted-text(5, "Host Name: ", fn:string($doc//m:host-name)),
-                    lib-bootstrap:display-with-muted-text(5, "Start Time: ",  fn:string(($doc//m:start-time)[1])),
-                    lib-bootstrap:display-with-muted-text(5, "End Time: ",  fn:string(($doc//m:end-time)[1])),(:order by xs:dateTime($i) descending return $i),:)
-                    lib-bootstrap:display-with-muted-text(5, "Group: ",  fn:string(($doc//m:group-name)[1])),
+                    lib-bootstrap:display-with-muted-text(5, "Meters File URI: ", $uri),
+                    
+                    lib-bootstrap:two-column-row(6,6,lib-bootstrap:display-with-muted-text(5, "Host Name: ", fn:string($doc//m:host-name)), lib-bootstrap:display-with-muted-text(5, "Group: ",  fn:string(($doc//m:group-name)[1]))),
+                    lib-bootstrap:two-column-row(6,6,lib-bootstrap:display-with-muted-text(5, "Start Time: ",  fn:string(($doc//m:start-time)[1])), lib-bootstrap:display-with-muted-text(5, "End Time: ",  fn:string(($doc//m:end-time)[1]))),
                     local:table($doc),
                     element h5 {"Debug:"},
                     element textarea {attribute class {"form-control"}, attribute rows {"25"}, $doc}
