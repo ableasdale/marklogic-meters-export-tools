@@ -6,11 +6,13 @@
     {
         if (event.keyCode == 39) 
         {
-            window.open('next.xqy','_self'); 
+            // a.next-link
+            //$('a.next-link').attr('href')
+            window.open($('a.next-link').attr('href'),'_self'); 
         }
         else if (event.keyCode == 37) 
-        {
-            window.open('prev.xqy','_self');
+        {   // a.prev-link
+            window.open($('a.prev-link').attr('href'),'_self');
         }
     });    		
 })(jQuery);

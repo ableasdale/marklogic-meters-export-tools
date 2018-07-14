@@ -15,8 +15,7 @@ declare function local:back-link() as element(a) {
     cts:element-value-query(xs:QName("m:host-name"), fn:string($doc//m:host-name))
   ))
 )
-  let $_ := xdmp:log(fn:base-uri($prev-doc))
-  return element a {attribute href{"/server.xqy?uri="||fn:base-uri($prev-doc)},"<"}  
+  return element a {attribute class {"prev-link"}, attribute href{"/server.xqy?uri="||fn:base-uri($prev-doc)},"<"}  
     (: fn:string($doc//m:start-time)[1] :)
 };
 
@@ -28,8 +27,7 @@ declare function local:next-link() as element(a) {
     cts:element-value-query(xs:QName("m:host-name"), fn:string($doc//m:host-name))
   ))
 )
-  let $_ := xdmp:log(fn:base-uri($next-doc))
-  return element a {attribute href{"/server.xqy?uri="||fn:base-uri($next-doc)},">"}  
+  return element a {attribute class {"next-link"}, attribute href{"/server.xqy?uri="||fn:base-uri($next-doc)},">"}  
 };
 
 
