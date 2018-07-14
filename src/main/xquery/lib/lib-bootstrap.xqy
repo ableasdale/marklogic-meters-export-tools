@@ -65,7 +65,7 @@ declare function lib-bootstrap:blockquote($quote as xs:string, $footer-text as x
 
 
 (: Card :)
-declare function lib-bootstrap:card-with-header($title as xs:string, $body as item()*) as element(div) {
+declare function lib-bootstrap:card-with-header($title as item(), $body as item()*) as element(div) {
 <div class="card">
 <h5 class="card-header">{$title}</h5>
 <div class="card-body">{$body}</div>
