@@ -1,5 +1,4 @@
 (function ($) {
-    console.log("ready");
     // SETS UP RIGHT/LEFT ARROW PAGINGATION
     // Key 39 is the right arrow
     // Key 37 is the left arrow
@@ -7,13 +6,11 @@
     {
         if (event.keyCode == 39) 
         {
-            console.log("right");
-            window.open('next-page-url','_self'); 
+            window.open('next.xqy','_self'); 
         }
         else if (event.keyCode == 37) 
         {
-            console.log("left");
-            window.open('previous-page-url','_self');
+            window.open('prev.xqy','_self');
         }
     });    		
 })(jQuery);

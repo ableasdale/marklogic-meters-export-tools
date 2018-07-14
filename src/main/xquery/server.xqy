@@ -7,6 +7,31 @@ declare namespace m = "http://marklogic.com/manage/meters";
 declare variable $uri := xdmp:get-request-field("uri"); (: TODO :)
 declare variable $doc := fn:doc($uri);
 
+declare function local:back-link() as element(a) {
+  let $start-time := cts:element-values(xs:QName("m:start-time"), fn:data($doc/m:server-statuses/m:period-start-time), ("descending", "limit=2"))[2]
+  let $prev-doc := cts:search(doc()/m:server-statuses,
+  cts:and-query((
+    cts:element-range-query(xs:QName("m:start-time"), "=", $start-time),
+    cts:element-value-query(xs:QName("m:host-name"), fn:string($doc//m:host-name))
+  ))
+)
+  let $_ := xdmp:log(fn:base-uri($prev-doc))
+  return element a {attribute href{"/server.xqy?uri="||fn:base-uri($prev-doc)},"<"}  
+    (: fn:string($doc//m:start-time)[1] :)
+};
+
+declare function local:next-link() as element(a) {
+  let $start-time := cts:element-values(xs:QName("m:start-time"), fn:data($doc/m:server-statuses/m:period-start-time), ("ascending", "limit=2"))[2]
+  let $next-doc := cts:search(doc()/m:server-statuses,
+  cts:and-query((
+    cts:element-range-query(xs:QName("m:start-time"), "=", $start-time),
+    cts:element-value-query(xs:QName("m:host-name"), fn:string($doc//m:host-name))
+  ))
+)
+  let $_ := xdmp:log(fn:base-uri($next-doc))
+  return element a {attribute href{"/server.xqy?uri="||fn:base-uri($next-doc)},">"}  
+};
+
 
 declare function local:table($i) {
 (:$i//m:start-time,
@@ -53,7 +78,11 @@ lib-bootstrap:create-starter-template("Server status for host: "|| fn:string($do
                     lib-bootstrap:display-with-muted-text(5, "Meters File URI: ", $uri),
                     
                     lib-bootstrap:two-column-row(6,6,lib-bootstrap:display-with-muted-text(5, "Host Name: ", fn:string($doc//m:host-name)), lib-bootstrap:display-with-muted-text(5, "Group: ",  fn:string(($doc//m:group-name)[1]))),
-                    lib-bootstrap:two-column-row(6,6,lib-bootstrap:display-with-muted-text(5, "Start Time: ",  fn:string(($doc//m:start-time)[1])), lib-bootstrap:display-with-muted-text(5, "End Time: ",  fn:string(($doc//m:end-time)[1]))),
+                    lib-bootstrap:four-column-row(1,5,5,1, 
+                        local:back-link(), 
+                        lib-bootstrap:display-with-muted-text(5, " Start Time: ",  fn:string(($doc//m:start-time)[1])), 
+                        lib-bootstrap:display-with-muted-text(5, "End Time: ",  fn:string(($doc//m:end-time)[1])), 
+                        local:next-link()),
                     local:table($doc),
                     element h5 {"Debug:"},
                     element textarea {attribute class {"form-control"}, attribute rows {"25"}, $doc}

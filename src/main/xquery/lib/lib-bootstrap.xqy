@@ -36,7 +36,7 @@ declare function lib-bootstrap:bootstrap-container($content as item()*) {
 element div { attribute class {"container-fluid"}, $content }
 };
 
-declare function lib-bootstrap:display-with-muted-text($size as xs:int, $main as xs:string, $sub as xs:string) as element() {
+declare function lib-bootstrap:display-with-muted-text($size as xs:int, $main as item()*, $sub as xs:string) as element() {
 element {"h"||$size} {$main || " ", element small { attribute class {"text-muted"}, $sub}}
 };
 
@@ -90,9 +90,18 @@ element div {attribute class {"col-"||$right}, $content-right}
 };
 
 declare function lib-bootstrap:three-column-row($left as xs:int, $centre as xs:int, $right as xs:int, $content-left as item(), $content-centre as item(), $content-right as item()) as element(div) {
-element div {attribute class {"row"},
-element div {attribute class {"col-"||$left}, $content-left},
-element div {attribute class {"col-"||$centre}, $content-centre},
-element div {attribute class {"col-"||$right}, $content-right}
-}
+    element div {attribute class {"row"},
+        element div {attribute class {"col-"||$left}, $content-left},
+        element div {attribute class {"col-"||$centre}, $content-centre},
+        element div {attribute class {"col-"||$right}, $content-right}
+    }
+};
+
+declare function lib-bootstrap:four-column-row($one as xs:int, $two as xs:int, $three as xs:int, $four as xs:int, $content-one as item(), $content-two as item(), $content-three as item(), $content-four as item()) as element(div) {
+    element div {attribute class {"row"},
+        element div {attribute class {"col-"||$one}, $content-one},
+        element div {attribute class {"col-"||$two}, $content-two},
+        element div {attribute class {"col-"||$three}, $content-three},
+        element div {attribute class {"col-"||$four}, $content-four}
+    }
 };
