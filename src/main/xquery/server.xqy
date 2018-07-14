@@ -58,5 +58,5 @@ lib-bootstrap:create-starter-template("Server status for host: "|| fn:string($do
                     element h5 {"Debug:"},
                     element textarea {attribute class {"form-control"}, attribute rows {"25"}, $doc}
                 )
-        )
+        ), <script src="/js.js">{" "}</script>
 )
