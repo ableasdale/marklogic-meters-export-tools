@@ -15,12 +15,6 @@ declare function local:get-doc-for-time($start-time){
     )[1]
 };
 
-declare function local:output-if-available($node){
-    if(exists($node))
-    then element td {fn:string($node)}
-    else element td {attribute class {"text-muted"}, "N/A"}
-};
-
 declare function local:process-start-times($start-times) {
     element tbody {
         for $start-time in $start-times
@@ -28,20 +22,20 @@ declare function local:process-start-times($start-times) {
         return
             element tr {
                 element td {element a {attribute href {"/host.xqy?uri="||fn:base-uri($k)},$start-time}},
-                local:output-if-available($k/m:host-status/m:total-cpu-stat-iowait),
-                local:output-if-available($k/m:host-status/m:memory-process-size),
-                local:output-if-available($k/m:host-status/m:memory-process-rss),
-                local:output-if-available($k/m:host-status/m:memory-process-rss-hwm),
-                local:output-if-available($k/m:host-status/m:memory-process-anon),
-                local:output-if-available($k/m:host-status/m:write-lock-rate),
-                local:output-if-available($k/m:host-status/m:total-cpu-stat-user),
-                local:output-if-available($k/m:host-status/m:total-cpu-stat-system),
-                local:output-if-available($k/m:host-status/m:memory-system-swapin-rate),
-                local:output-if-available($k/m:host-status/m:memory-system-swapout-rate),
-                local:output-if-available($k/m:host-status/m:read-lock-count),
-                local:output-if-available($k/m:host-status/m:read-lock-rate),
-                local:output-if-available($k/m:host-status/m:deadlock-count),
-                local:output-if-available($k/m:host-status/m:deadlock-rate)
+                lib-view:output-td-if-available($k/m:host-status/m:total-cpu-stat-iowait),
+                lib-view:output-td-if-available($k/m:host-status/m:memory-process-size),
+                lib-view:output-td-if-available($k/m:host-status/m:memory-process-rss),
+                lib-view:output-td-if-available($k/m:host-status/m:memory-process-rss-hwm),
+                lib-view:output-td-if-available($k/m:host-status/m:memory-process-anon),
+                lib-view:output-td-if-available($k/m:host-status/m:write-lock-rate),
+                lib-view:output-td-if-available($k/m:host-status/m:total-cpu-stat-user),
+                lib-view:output-td-if-available($k/m:host-status/m:total-cpu-stat-system),
+                lib-view:output-td-if-available($k/m:host-status/m:memory-system-swapin-rate),
+                lib-view:output-td-if-available($k/m:host-status/m:memory-system-swapout-rate),
+                lib-view:output-td-if-available($k/m:host-status/m:read-lock-count),
+                lib-view:output-td-if-available($k/m:host-status/m:read-lock-rate),
+                lib-view:output-td-if-available($k/m:host-status/m:deadlock-count),
+                lib-view:output-td-if-available($k/m:host-status/m:deadlock-rate)
                 (: element td {fn:string($k/m:host-status/m:memory-process-size) || " / " || fn:string($k//m:host-statuses/m:host-status/m:memory-process-rss)}:)
             }
     }

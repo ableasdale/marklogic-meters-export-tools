@@ -1,9 +1,16 @@
 xquery version "1.0-ml";
 
 module namespace lib-view = "http://www.xmlmachines.com/lib-view";
+import module namespace lib-bootstrap = "http://www.xmlmachines.com/lib-bootstrap" at "/lib/lib-bootstrap.xqy";
 
 declare namespace m = "http://marklogic.com/manage/meters";
 declare namespace xdmp = "http://marklogic.com/xdmp";
+
+declare function lib-view:output-td-if-available($node as node()?){
+    if(exists($node))
+    then element td {fn:string($node)}
+    else element td {attribute class {"text-muted"}, "N/A"}
+};
 
 declare function lib-view:nav() {
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -35,9 +42,14 @@ declare function lib-view:nav() {
       </li -->
     </ul>
     <form class="form-inline my-2 my-lg-0">
-      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search"/>
-      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">TODO: Search</button>
+      <input class="form-control mr-sm-2" type="search" placeholder="TODO: Search" aria-label="Search"/>
+      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">GO</button>
     </form>
   </div>
 </nav>
+};
+
+declare function lib-view:top-page-summary($uri, $doc) {
+    lib-bootstrap:display-with-muted-text(5, "Meters File URI: ", $uri),
+    lib-bootstrap:two-column-row(6,6,lib-bootstrap:display-with-muted-text(5, "Host Name: ", fn:string($doc//m:host-name)), lib-bootstrap:display-with-muted-text(5, "Group: ",  fn:string(($doc//m:group-name)[1])))
 };

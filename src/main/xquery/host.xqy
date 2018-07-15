@@ -47,11 +47,11 @@ lib-bootstrap:create-starter-template("Host status for host: "|| fn:string($doc/
         lib-bootstrap:bootstrap-container(
                 (
                     lib-view:nav(),
-                    lib-bootstrap:display-with-muted-text(4, "Meters File URI: ", $uri),
-                    lib-bootstrap:display-with-muted-text(5, "Host Name: ", fn:string($doc//m:host-name)),
+                    lib-view:top-page-summary($uri, $doc),
+                    
                     lib-bootstrap:display-with-muted-text(5, "Start Time: ",  fn:string(($doc//m:start-time)[1])   ),
                     lib-bootstrap:display-with-muted-text(5, "End Time: ",  fn:string(($doc//m:end-time)[1])   ),(:order by xs:dateTime($i) descending return $i),:)
-                    lib-bootstrap:display-with-muted-text(5, "Group: ",  fn:string(($doc//m:group-name)[1])   ),
+        
                     for $i in $doc/m:host-statuses
                     return local:process-row($i),
                     element h5 {"Debug:"},

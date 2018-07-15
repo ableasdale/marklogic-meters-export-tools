@@ -74,9 +74,7 @@ declare function local:process-server-status-elements($i) {
 lib-bootstrap:create-starter-template("Server status for host: "|| fn:string($doc//m:host-name),
         lib-bootstrap:bootstrap-container(
                 (   lib-view:nav(),
-                    lib-bootstrap:display-with-muted-text(5, "Meters File URI: ", $uri),
-                    
-                    lib-bootstrap:two-column-row(6,6,lib-bootstrap:display-with-muted-text(5, "Host Name: ", fn:string($doc//m:host-name)), lib-bootstrap:display-with-muted-text(5, "Group: ",  fn:string(($doc//m:group-name)[1]))),
+                    lib-view:top-page-summary($uri, $doc),
                     lib-bootstrap:four-column-row(1,5,5,1, 
                         local:back-link(), 
                         lib-bootstrap:display-with-muted-text(5, " Start Time: ",  fn:string(($doc//m:start-time)[1])), 
