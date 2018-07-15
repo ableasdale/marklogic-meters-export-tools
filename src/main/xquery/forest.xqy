@@ -53,8 +53,7 @@ lib-bootstrap:create-starter-template("Forest status for host: "|| fn:string($do
                     lib-bootstrap:display-with-muted-text(5, "Group: ",  fn:string(($doc//m:group-name)[1])   ),
                     for $i in $doc/m:forest-statuses
                     return local:process-row($i),
-                    element h5 {"Debug:"},
-                    element textarea {attribute class {"form-control"}, attribute rows {"25"}, $doc}
+                    lib-view:render-xml-doc($doc)
                 )
         )
 )

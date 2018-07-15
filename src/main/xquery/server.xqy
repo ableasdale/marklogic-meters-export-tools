@@ -83,8 +83,7 @@ lib-bootstrap:create-starter-template("Server status for host: "|| fn:string($do
                         lib-bootstrap:display-with-muted-text(5, "End Time: ",  fn:string(($doc//m:end-time)[1])), 
                         local:next-link()),
                     local:table($doc),
-                    element h5 {"Debug:"},
-                    element textarea {attribute class {"form-control"}, attribute rows {"25"}, $doc}
+                    lib-view:render-xml-doc($doc)
                 )
         ), <script src="/js.js">{" "}</script>
 )

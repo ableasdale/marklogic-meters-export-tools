@@ -13,6 +13,11 @@ declare function lib-view:output-td-if-available($node as node()?){
     else element td {attribute class {"text-muted"}, "N/A"}
 };
 
+declare function lib-view:render-xml-doc($doc as document-node()){
+    element h5 {"XML Content:"},
+    element textarea {attribute id {"xml"}, attribute class {"form-control"}, attribute rows {"25"}, $doc}
+};
+
 declare function lib-view:nav() {
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <a class="navbar-brand" href="#">ML-LOGO</a>

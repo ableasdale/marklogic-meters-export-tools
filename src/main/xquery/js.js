@@ -14,5 +14,9 @@
         {   // a.prev-link
             window.open($('a.prev-link').attr('href'),'_self');
         }
-    });    		
+    });    	
+    var editor = CodeMirror.fromTextArea(document.getElementById("xml"), {
+        lineNumbers: true,
+        mode:  "xml"
+    });	
 })(jQuery);

@@ -91,8 +91,7 @@ lib-bootstrap:create-starter-template("Host status for host: "|| fn:string($doc/
             ),
             for $i in $doc/m:database-statuses
             return local:process-row($i),
-            element h5 {"Debug:"},
-            element textarea {attribute class {"form-control"}, attribute rows {"25"}, $doc}
+            lib-view:render-xml-doc($doc)
         )
     ), <script src="/js.js">{" "}</script>
 )
