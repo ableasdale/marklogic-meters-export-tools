@@ -57,5 +57,5 @@ lib-bootstrap:create-starter-template("Host status for host: "|| fn:string($doc/
                     return local:process-row($i),
                     lib-view:render-xml-doc($doc)
                 )
-        )
+        ), <script src="/js.js">{" "}</script>
 )

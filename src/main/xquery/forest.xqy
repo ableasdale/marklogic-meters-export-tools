@@ -55,5 +55,5 @@ lib-bootstrap:create-starter-template("Forest status for host: "|| fn:string($do
                     return local:process-row($i),
                     lib-view:render-xml-doc($doc)
                 )
-        )
+        ), <script src="/js.js">{" "}</script>
 )
