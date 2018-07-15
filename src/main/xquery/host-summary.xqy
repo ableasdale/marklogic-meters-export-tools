@@ -1,5 +1,6 @@
 xquery version "1.0-ml";
 
+import module namespace lib-view = "http://www.xmlmachines.com/lib-view" at "/lib/lib-view.xqy";
 import module namespace lib-bootstrap = "http://www.xmlmachines.com/lib-bootstrap" at "/lib/lib-bootstrap.xqy";
 
 declare namespace m = "http://marklogic.com/manage/meters";
@@ -62,7 +63,9 @@ declare function local:table($start-times) {
 
 lib-bootstrap:create-starter-template("Host Summary: "||$hostname,
     lib-bootstrap:bootstrap-container(
-        (element h3 {$hostname},
+        (   
+            lib-view:nav(),
+            element h3 {$hostname},
             local:table(cts:element-values(xs:QName("m:start-time"))
         ))
     )

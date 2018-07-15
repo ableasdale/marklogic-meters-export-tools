@@ -1,5 +1,6 @@
 xquery version "1.0-ml";
 
+import module namespace lib-view = "http://www.xmlmachines.com/lib-view" at "/lib/lib-view.xqy";
 import module namespace lib-bootstrap = "http://www.xmlmachines.com/lib-bootstrap" at "/lib/lib-bootstrap.xqy";
 
 declare namespace m = "http://marklogic.com/manage/meters";
@@ -20,7 +21,7 @@ declare function local:process-link($i) {
 
 lib-bootstrap:create-starter-template("Details for Start Time: "||$start-time,
         lib-bootstrap:bootstrap-container(
-                (
+                (   lib-view:nav(),
                     lib-bootstrap:display-with-muted-text(4, "Start Time: ", $start-time),
                     lib-bootstrap:display-with-muted-text(5, "Matches for this Start time: ", xs:string(xdmp:estimate(cts:search(doc(), $range-query)))),
                 (:)element h3 {"Start Time:", element small {$start-time}} :)

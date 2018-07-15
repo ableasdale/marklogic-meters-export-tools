@@ -1,5 +1,6 @@
 xquery version "1.0-ml";
 
+import module namespace lib-view = "http://www.xmlmachines.com/lib-view" at "/lib/lib-view.xqy";
 import module namespace lib-bootstrap = "http://www.xmlmachines.com/lib-bootstrap" at "/lib/lib-bootstrap.xqy";
 
 declare namespace m = "http://marklogic.com/manage/meters";
@@ -43,6 +44,7 @@ declare function local:process-forest-status-elements($i) {
 lib-bootstrap:create-starter-template("Forest status for host: "|| fn:string($doc//m:host-name),
         lib-bootstrap:bootstrap-container(
                 (
+                    lib-view:nav(),
                     lib-bootstrap:display-with-muted-text(4, "Meters File URI: ", $uri),
                     lib-bootstrap:display-with-muted-text(5, "Host Name: ", fn:string($doc//m:host-name)),
                     lib-bootstrap:display-with-muted-text(5, "Start Time: ",  fn:string(($doc//m:start-time)[1])   ),
