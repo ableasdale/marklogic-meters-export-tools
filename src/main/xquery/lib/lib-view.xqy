@@ -5,6 +5,7 @@ import module namespace lib-bootstrap = "http://www.xmlmachines.com/lib-bootstra
 
 declare namespace m = "http://marklogic.com/manage/meters";
 declare namespace xdmp = "http://marklogic.com/xdmp";
+declare namespace cts = "http://marklogic.com/cts";
 
 declare function lib-view:output-td-if-available($node as node()?){
     if(exists($node))
