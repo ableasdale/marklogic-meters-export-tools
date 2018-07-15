@@ -4,6 +4,8 @@ import module namespace lib-view = "http://www.xmlmachines.com/lib-view" at "/li
 import module namespace lib-bootstrap = "http://www.xmlmachines.com/lib-bootstrap" at "/lib/lib-bootstrap.xqy";
 
 declare namespace m = "http://marklogic.com/manage/meters";
+declare namespace cts = "http://marklogic.com/cts";
+declare namespace xdmp = "http://marklogic.com/xdmp";
 
 declare variable $uri := xdmp:get-request-field("uri"); (: TODO :)
 declare variable $doc := fn:doc($uri);

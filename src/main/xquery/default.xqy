@@ -5,6 +5,7 @@ import module namespace lib-bootstrap = "http://www.xmlmachines.com/lib-bootstra
 
 declare namespace m = "http://marklogic.com/manage/meters";
 declare namespace cts = "http://marklogic.com/cts";
+declare namespace xdmp = "http://marklogic.com/xdmp";
 
 declare variable $first-start-datetime := cts:element-values(xs:QName("m:start-time"), (), ("ascending", "limit=1"));
 declare variable $last-start-datetime := cts:element-values(xs:QName("m:start-time"), (), ("descending", "limit=1"));
