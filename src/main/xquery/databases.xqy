@@ -4,6 +4,7 @@ import module namespace lib-view = "http://www.xmlmachines.com/lib-view" at "/li
 import module namespace lib-bootstrap = "http://www.xmlmachines.com/lib-bootstrap" at "/lib/lib-bootstrap.xqy";
 
 declare namespace m = "http://marklogic.com/manage/meters";
+declare namespace xdmp = "http://marklogic.com/xdmp";
 
 declare variable $uri := xdmp:get-request-field("uri"); (: TODO :)
 declare variable $doc := fn:doc($uri);
@@ -14,9 +15,11 @@ declare function local:process-row($i) {
   $i//m:list-cache-misses :)
     element table { attribute class {"table table-striped table-bordered"},
         element thead { attribute class {"thead-dark"},
-        element tr {for $i in ( "Name", "NBT", "AFC", "DFC", "LCH", "LCM", "CTCH", "CTCM", "DLC", "WLC", "Fragments [A/D]") return element th {$i}}
+        element tr {for $i in ( "Name", <abbr title="Nonblocking Timestamp">NBT</abbr>, <abbr title="Active Fragment Count">AFC</abbr>, <abbr title="Deleted Fragment Count">DFC</abbr>, <abbr title="List Cache Hits / Rate">LCH</abbr>, <abbr title="List Cache Misses / Rate">LCM</abbr>, <abbr title="Compressed Tree Cache Hits / Rate">CTCH</abbr>, <abbr title="Compressed Tree Cache Misses / Rate">CTCM</abbr>, <abbr title="Deadlock Count / Rate">DLC</abbr>, <abbr title="Write Lock Count / Rate">WLC</abbr>, "Fragments [A/D]") return element th {$i}}
         },
-    (: "Start Time", "End Time", :)
+(: 
+        , <abbr title="User CPU Utilisation (%)">Usr</abbr>, <abbr title="System CPU Utilisation (%)">Sys</abbr>, <abbr title="System Swap-In Rate">SI</abbr>, <abbr title="System Swap-Out Rate">SO</abbr>, <abbr title="Read Lock Count">RLC</abbr>, <abbr title="Read Lock Rate">RLR</abbr>, <abbr title="Deadlock Count">DLC</abbr>, <abbr title="Deadlock Rate">DLR</abbr>
+    "Start Time", "End Time", :)
 
         local:process-forest-status-elements($i)
     }
