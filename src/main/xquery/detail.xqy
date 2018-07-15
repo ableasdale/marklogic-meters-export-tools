@@ -16,6 +16,8 @@ declare function local:process-link($i) {
             then (element li {element a {attribute href {"/forest.xqy?uri="||$uri}, $uri}})
         else if (fn:contains($uri, "server-raw.xml"))
             then (element li {element a {attribute href {"/server.xqy?uri="||$uri}, $uri}})
+        else if (fn:contains($uri, "databases-raw.xml"))
+            then (element li {element a {attribute href {"/databases.xqy?uri="||$uri}, $uri}})
         else (element li {$uri})
 };
 
