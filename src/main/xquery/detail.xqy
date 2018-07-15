@@ -24,20 +24,20 @@ declare function local:process-link($i) {
 };
 
 lib-bootstrap:create-starter-template("Details for Start Time: "||$start-time,
-        lib-bootstrap:bootstrap-container(
-                (   lib-view:nav(),
-                    lib-bootstrap:display-with-muted-text(4, "Start Time: ", $start-time),
-                    lib-bootstrap:display-with-muted-text(5, "Matches for this Start time: ", xs:string(xdmp:estimate(cts:search(doc(), $range-query)))),
-                (:)element h3 {"Start Time:", element small {$start-time}} :)
+    lib-bootstrap:bootstrap-container(
+        (   lib-view:nav(),
+            lib-bootstrap:display-with-muted-text(4, "Start Time: ", $start-time),
+            lib-bootstrap:display-with-muted-text(5, "Matches for this Start time: ", xs:string(xdmp:estimate(cts:search(doc(), $range-query)))),
+        (:)element h3 {"Start Time:", element small {$start-time}} :)
 
-                    for $i in cts:element-values(xs:QName("m:host-name"))
-                    return lib-bootstrap:card-with-header(element a {attribute href {"/host-summary.xqy?hostname="||$i}, $i}, element ul {
-                        for $j in cts:search(doc(), cts:and-query( ($range-query, cts:element-value-query(xs:QName("m:host-name"), $i))) )
-                        return local:process-link ($j)
-                    })
+            for $i in cts:element-values(xs:QName("m:host-name"))
+            return lib-bootstrap:card-with-header(element a {attribute href {"/host-summary.xqy?hostname="||$i}, $i}, element ul {
+                for $j in cts:search(doc(), cts:and-query( ($range-query, cts:element-value-query(xs:QName("m:host-name"), $i))) )
+                return local:process-link ($j)
+            })
 
-                )
         )
+    )
 )
 
 

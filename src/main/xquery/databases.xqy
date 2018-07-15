@@ -7,30 +7,29 @@ declare namespace m = "http://marklogic.com/manage/meters";
 declare namespace xdmp = "http://marklogic.com/xdmp";
 declare namespace cts = "http://marklogic.com/cts";
 
-declare variable $uri := xdmp:get-request-field("uri"); (: TODO :)
+declare variable $uri := xdmp:get-request-field("uri");
 declare variable $doc := fn:doc($uri);
 
 declare function local:back-link() as element(a) {
-  let $start-time := cts:element-values(xs:QName("m:start-time"), fn:data($doc/m:database-statuses/m:period-start-time), ("descending", "limit=2"))[2]
-  let $prev-doc := cts:search(doc()/m:database-statuses,
-  cts:and-query((
-    cts:element-range-query(xs:QName("m:start-time"), "=", $start-time),
-    cts:element-value-query(xs:QName("m:host-name"), fn:string($doc//m:host-name))
-  ))
-)
-  return element a {attribute class {"prev-link"}, attribute href{"/databases.xqy?uri="||fn:base-uri($prev-doc)},"<"}  
-    (: fn:string($doc//m:start-time)[1] :)
+    let $start-time := cts:element-values(xs:QName("m:start-time"), fn:data($doc/m:database-statuses/m:period-start-time), ("descending", "limit=2"))[2]
+    let $prev-doc := cts:search(doc()/m:database-statuses,
+                        cts:and-query((
+                            cts:element-range-query(xs:QName("m:start-time"), "=", $start-time),
+                            cts:element-value-query(xs:QName("m:host-name"), fn:string($doc//m:host-name))
+                        ))
+                    )
+    return element a {attribute class {"prev-link"}, attribute href{"/databases.xqy?uri="||fn:base-uri($prev-doc)},"<"}
 };
 
 declare function local:next-link() as element(a) {
-  let $start-time := cts:element-values(xs:QName("m:start-time"), fn:data($doc/m:database-statuses/m:period-start-time), ("ascending", "limit=2"))[2]
-  let $next-doc := cts:search(doc()/m:database-statuses,
-  cts:and-query((
-    cts:element-range-query(xs:QName("m:start-time"), "=", $start-time),
-    cts:element-value-query(xs:QName("m:host-name"), fn:string($doc//m:host-name))
-  ))
-)
-  return element a {attribute class {"next-link"}, attribute href{"/databases.xqy?uri="||fn:base-uri($next-doc)},">"}  
+    let $start-time := cts:element-values(xs:QName("m:start-time"), fn:data($doc/m:database-statuses/m:period-start-time), ("ascending", "limit=2"))[2]
+    let $next-doc := cts:search(doc()/m:database-statuses,
+                        cts:and-query((
+                            cts:element-range-query(xs:QName("m:start-time"), "=", $start-time),
+                            cts:element-value-query(xs:QName("m:host-name"), fn:string($doc//m:host-name))
+                        ))
+                    )
+    return element a {attribute class {"next-link"}, attribute href{"/databases.xqy?uri="||fn:base-uri($next-doc)},">"}  
 };
 
 declare function local:process-row($i) {
@@ -79,21 +78,21 @@ declare function local:process-forest-status-elements($i) {
 }; 
 
 lib-bootstrap:create-starter-template("Host status for host: "|| fn:string($doc//m:host-name),
-        lib-bootstrap:bootstrap-container(
-                (
-                    lib-view:nav(),
-                    lib-view:top-page-summary($uri, $doc),
+    lib-bootstrap:bootstrap-container(
+        (
+            lib-view:nav(),
+            lib-view:top-page-summary($uri, $doc),
 
-                    lib-bootstrap:four-column-row(1,5,5,1, 
-                        local:back-link(), 
-                        lib-bootstrap:display-with-muted-text(5, " Start Time: ",  fn:string(($doc//m:start-time)[1])), 
-                        lib-bootstrap:display-with-muted-text(5, "End Time: ",  fn:string(($doc//m:end-time)[1])), 
-                        local:next-link()
-                    ),
-                    for $i in $doc/m:database-statuses
-                    return local:process-row($i),
-                    element h5 {"Debug:"},
-                    element textarea {attribute class {"form-control"}, attribute rows {"25"}, $doc}
-                )
-        ), <script src="/js.js">{" "}</script>
+            lib-bootstrap:four-column-row(1,5,5,1, 
+                local:back-link(), 
+                lib-bootstrap:display-with-muted-text(5, " Start Time: ",  fn:string(($doc//m:start-time)[1])), 
+                lib-bootstrap:display-with-muted-text(5, "End Time: ",  fn:string(($doc//m:end-time)[1])), 
+                local:next-link()
+            ),
+            for $i in $doc/m:database-statuses
+            return local:process-row($i),
+            element h5 {"Debug:"},
+            element textarea {attribute class {"form-control"}, attribute rows {"25"}, $doc}
+        )
+    ), <script src="/js.js">{" "}</script>
 )
