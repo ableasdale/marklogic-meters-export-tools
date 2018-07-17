@@ -12,28 +12,15 @@ then (fn:doc($lib-view:URI))
 else ();
 
 declare function local:back-link() as element(a) {
-  let $start-time := cts:element-values(xs:QName("m:start-time"), fn:data($doc/m:server-statuses/m:period-start-time), ("descending", "limit=2"))[2]
-  let $prev-doc := cts:search(doc()/m:server-statuses,
-  cts:and-query((
-    cts:element-range-query(xs:QName("m:start-time"), "=", $start-time),
-    cts:element-value-query(xs:QName("m:period"), "raw"),
-    cts:element-value-query(xs:QName("m:host-name"), fn:string($doc//m:host-name))
-  ))
-)
-  return element a {attribute class {"prev-link"}, attribute href{"/server.xqy?uri="||fn:base-uri($prev-doc)},"<"}  
-    (: fn:string($doc//m:start-time)[1] :)
+    let $start-time := cts:element-values(xs:QName("m:start-time"), fn:data($doc/m:server-statuses/m:period-start-time), ("descending", "limit=2"))[2]
+    let $prev-doc := cts:search(doc()/m:server-statuses, lib-view:and-query($start-time, $lib-view:HOST))
+    return lib-view:build-href("prev-link", $lib-view:MODULE, fn:base-uri($prev-doc), fn:string($start-time), $lib-view:HOST, "<") 
 };
 
 declare function local:next-link() as element(a) {
   let $start-time := cts:element-values(xs:QName("m:start-time"), fn:data($doc/m:server-statuses/m:period-start-time), ("ascending", "limit=2"))[2]
-  let $next-doc := cts:search(doc()/m:server-statuses,
-  cts:and-query((
-    cts:element-range-query(xs:QName("m:start-time"), "=", $start-time),
-    cts:element-value-query(xs:QName("m:period"), "raw"),
-    cts:element-value-query(xs:QName("m:host-name"), fn:string($doc//m:host-name))
-  ))
-)
-  return element a {attribute class {"next-link"}, attribute href{"/server.xqy?uri="||fn:base-uri($next-doc)},">"}  
+  let $next-doc := cts:search(doc()/m:server-statuses, lib-view:and-query($start-time, $lib-view:HOST))
+  return lib-view:build-href("next-link", $lib-view:MODULE, fn:base-uri($next-doc), fn:string($start-time), $lib-view:HOST, ">") 
 };
 
 

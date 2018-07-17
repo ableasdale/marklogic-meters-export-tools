@@ -13,28 +13,14 @@ else ();
 
 declare function local:back-link() as element(a) {
     let $start-time := cts:element-values(xs:QName("m:start-time"), fn:data($doc/m:database-statuses/m:period-start-time), ("descending", "limit=2"))[2]
-    let $prev-doc := cts:search(doc()/m:database-statuses,
-                        cts:and-query((
-                            cts:element-range-query(xs:QName("m:start-time"), "=", $start-time),
-                            cts:element-value-query(xs:QName("m:period"), "raw"),
-                            cts:element-value-query(xs:QName("m:host-name"), $lib-view:HOST)
-                        ))
-                    )
-    (: where (contains(fn:base-uri($prev-doc), "-raw.xml")) :)
-    return element a {attribute class {"prev-link"}, attribute href{"/databases.xqy?uri="||fn:base-uri($prev-doc)||"&amp;st="||$start-time||"&amp;host="||$lib-view:HOST},"<"}
+    let $prev-doc := cts:search(doc()/m:database-statuses, lib-view:and-query($start-time, $lib-view:HOST))
+    return lib-view:build-href("prev-link", $lib-view:MODULE, fn:base-uri($prev-doc), fn:string($start-time), $lib-view:HOST, "<") 
 };
 
 declare function local:next-link() as element(a) {
     let $start-time := cts:element-values(xs:QName("m:start-time"), fn:data($doc/m:database-statuses/m:period-start-time), ("ascending", "limit=2"))[2]
-    let $next-doc := cts:search(doc()/m:database-statuses,
-                        cts:and-query((
-                            cts:element-range-query(xs:QName("m:start-time"), "=", $start-time),
-                            cts:element-value-query(xs:QName("m:period"), "raw"),
-                            cts:element-value-query(xs:QName("m:host-name"), $lib-view:HOST)
-                        ))
-                    )
-    (: where (contains(fn:base-uri($next-doc), "-raw.xml")) :)
-    return element a {attribute class {"next-link"}, attribute href{"/databases.xqy?uri="||fn:base-uri($next-doc)||"&amp;st="||$start-time||"&amp;host="||$lib-view:HOST},">"}  
+    let $next-doc := cts:search(doc()/m:database-statuses, lib-view:and-query($start-time, $lib-view:HOST))
+    return lib-view:build-href("next-link", $lib-view:MODULE, fn:base-uri($next-doc), fn:string($start-time), $lib-view:HOST, ">")
 };
 
 declare function local:process-row($i) {
