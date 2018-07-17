@@ -8,13 +8,16 @@ declare namespace cts = "http://marklogic.com/cts";
 declare namespace xdmp = "http://marklogic.com/xdmp";
 
 declare variable $uri := xdmp:get-request-field("uri"); (: TODO :)
-declare variable $doc := fn:doc($uri);
+declare variable $doc := if (doc-available($uri) 
+then (fn:doc($uri)
+else ();
 
 declare function local:back-link() as element(a) {
   let $start-time := cts:element-values(xs:QName("m:start-time"), fn:data($doc/m:server-statuses/m:period-start-time), ("descending", "limit=2"))[2]
   let $prev-doc := cts:search(doc()/m:server-statuses,
   cts:and-query((
     cts:element-range-query(xs:QName("m:start-time"), "=", $start-time),
+    cts:element-value-query(xs:QName("m:period"), "raw"),
     cts:element-value-query(xs:QName("m:host-name"), fn:string($doc//m:host-name))
   ))
 )
@@ -27,6 +30,7 @@ declare function local:next-link() as element(a) {
   let $next-doc := cts:search(doc()/m:server-statuses,
   cts:and-query((
     cts:element-range-query(xs:QName("m:start-time"), "=", $start-time),
+    cts:element-value-query(xs:QName("m:period"), "raw"),
     cts:element-value-query(xs:QName("m:host-name"), fn:string($doc//m:host-name))
   ))
 )

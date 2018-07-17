@@ -7,15 +7,54 @@ declare namespace m = "http://marklogic.com/manage/meters";
 declare namespace xdmp = "http://marklogic.com/xdmp";
 declare namespace cts = "http://marklogic.com/cts";
 
+declare variable $URI := xdmp:get-request-field("uri");
+declare variable $HOST := xdmp:get-request-field("host");
+declare variable $START-TIME := xdmp:get-request-field("st");
+declare variable $MODULE := fn:tokenize(fn:substring-before(xdmp:get-request-url(), "?"),"/")[last()];
+
+declare function lib-view:exec-query-get-uri($xpath, $start-time, $hostname) {
+  fn:base-uri(lib-view:exec-query($xpath, $start-time, $hostname))
+};
+
+declare function lib-view:exec-query($xpath, $start-time, $hostname) {
+  xdmp:log("foo: "|| $start-time || $hostname),
+  (: TODO - hard coded /m:database-statuses! :)
+  xdmp:log(
+cts:search(doc()/m:database-statuses,
+  cts:and-query((
+    cts:element-range-query(xs:QName("m:start-time"), "=", xs:dateTime($start-time)),
+    cts:element-value-query(xs:QName("m:period"), "raw"),
+    cts:element-value-query(xs:QName("m:host-name"), $hostname)
+  )))),
+
+  cts:search(doc()/m:database-statuses,
+    cts:and-query((
+      cts:element-range-query(xs:QName("m:start-time"), "=", xs:dateTime($start-time)),
+      cts:element-value-query(xs:QName("m:period"), "raw"),
+      cts:element-value-query(xs:QName("m:host-name"), $hostname)
+    ))
+  )
+};
+
 declare function lib-view:output-td-if-available($node as node()?){
     if(exists($node))
     then element td {fn:string($node)}
     else element td {attribute class {"text-muted"}, "N/A"}
 };
 
+declare function lib-view:build-href($classname as xs:string, $module as xs:string, $uri as xs:string, $start-time as xs:string, $host as xs:string, $linktext as xs:string) {
+  element a {attribute class {$classname}, attribute href{"/"||$module||"?uri="||$uri||"&amp;st="||$start-time||"&amp;host="||$host},$linktext}
+};
+
 declare function lib-view:render-xml-doc($doc as document-node()){
-    element h5 {"XML Content:"},
-    element textarea {attribute id {"xml"}, attribute class {"form-control"}, attribute rows {"25"}, $doc}
+  element h5 {"XML Content:"},
+  element textarea {attribute id {"xml"}, attribute class {"form-control"}, attribute rows {"25"}, $doc}
+};
+
+declare function lib-view:is-active($item1 as xs:string, $item2 as xs:string) as xs:string {
+  if ($item1 eq $item2)
+  then ("dropdown-item active")
+  else ("dropdown-item")
 };
 
 declare function lib-view:nav() {
@@ -34,13 +73,23 @@ declare function lib-view:nav() {
         <a class="nav-link" href="#">Link</a>
       </li -->
       <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarHostDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           By Host
         </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+        <div class="dropdown-menu" aria-labelledby="navbarHostDropdown">
           {for $i in cts:element-values(xs:QName("m:host-name"))
-            return element a {attribute class {"dropdown-item"}, attribute href {"/host-summary.xqy?hostname="||$i}, $i}
-          }  
+          
+            (: TODO - hard coded XPath - "x" :)
+            return lib-view:build-href(lib-view:is-active($i, $HOST), $MODULE, lib-view:exec-query-get-uri("x", $START-TIME, $i), $START-TIME, $i, $i)
+          }
+        </div>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Raw Type
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="nav-link disabled" href="#">TODO</a> 
         </div>
       </li>
       <!-- li class="nav-item">

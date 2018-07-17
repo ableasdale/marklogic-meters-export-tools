@@ -7,18 +7,21 @@ declare namespace m = "http://marklogic.com/manage/meters";
 declare namespace xdmp = "http://marklogic.com/xdmp";
 declare namespace cts = "http://marklogic.com/cts";
 
-declare variable $uri := xdmp:get-request-field("uri");
-declare variable $doc := fn:doc($uri);
+declare variable $doc := if (string-length($lib-view:URI) gt 0) 
+then (fn:doc($lib-view:URI))
+else ();
 
 declare function local:back-link() as element(a) {
     let $start-time := cts:element-values(xs:QName("m:start-time"), fn:data($doc/m:database-statuses/m:period-start-time), ("descending", "limit=2"))[2]
     let $prev-doc := cts:search(doc()/m:database-statuses,
                         cts:and-query((
                             cts:element-range-query(xs:QName("m:start-time"), "=", $start-time),
-                            cts:element-value-query(xs:QName("m:host-name"), fn:string($doc//m:host-name))
+                            cts:element-value-query(xs:QName("m:period"), "raw"),
+                            cts:element-value-query(xs:QName("m:host-name"), $lib-view:HOST)
                         ))
                     )
-    return element a {attribute class {"prev-link"}, attribute href{"/databases.xqy?uri="||fn:base-uri($prev-doc)},"<"}
+    (: where (contains(fn:base-uri($prev-doc), "-raw.xml")) :)
+    return element a {attribute class {"prev-link"}, attribute href{"/databases.xqy?uri="||fn:base-uri($prev-doc)||"&amp;st="||$start-time||"&amp;host="||$lib-view:HOST},"<"}
 };
 
 declare function local:next-link() as element(a) {
@@ -26,10 +29,12 @@ declare function local:next-link() as element(a) {
     let $next-doc := cts:search(doc()/m:database-statuses,
                         cts:and-query((
                             cts:element-range-query(xs:QName("m:start-time"), "=", $start-time),
-                            cts:element-value-query(xs:QName("m:host-name"), fn:string($doc//m:host-name))
+                            cts:element-value-query(xs:QName("m:period"), "raw"),
+                            cts:element-value-query(xs:QName("m:host-name"), $lib-view:HOST)
                         ))
                     )
-    return element a {attribute class {"next-link"}, attribute href{"/databases.xqy?uri="||fn:base-uri($next-doc)},">"}  
+    (: where (contains(fn:base-uri($next-doc), "-raw.xml")) :)
+    return element a {attribute class {"next-link"}, attribute href{"/databases.xqy?uri="||fn:base-uri($next-doc)||"&amp;st="||$start-time||"&amp;host="||$lib-view:HOST},">"}  
 };
 
 declare function local:process-row($i) {
@@ -77,11 +82,11 @@ declare function local:process-forest-status-elements($i) {
     }
 }; 
 
-lib-bootstrap:create-starter-template("Host status for host: "|| fn:string($doc//m:host-name),
+lib-bootstrap:create-starter-template("Database status for host: "|| fn:string($doc//m:host-name),
     lib-bootstrap:bootstrap-container(
         (
             lib-view:nav(),
-            lib-view:top-page-summary($uri, $doc),
+            lib-view:top-page-summary($lib-view:URI, $doc),
 
             lib-bootstrap:four-column-row(1,5,5,1, 
                 local:back-link(), 
