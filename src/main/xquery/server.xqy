@@ -7,9 +7,8 @@ declare namespace m = "http://marklogic.com/manage/meters";
 declare namespace cts = "http://marklogic.com/cts";
 declare namespace xdmp = "http://marklogic.com/xdmp";
 
-declare variable $uri := xdmp:get-request-field("uri"); (: TODO :)
-declare variable $doc := if (doc-available($uri) 
-then (fn:doc($uri)
+declare variable $doc := if (string-length($lib-view:URI) gt 0) 
+then (fn:doc($lib-view:URI))
 else ();
 
 declare function local:back-link() as element(a) {
@@ -80,7 +79,7 @@ declare function local:process-server-status-elements($i) {
 lib-bootstrap:create-starter-template("Server status for host: "|| fn:string($doc//m:host-name),
         lib-bootstrap:bootstrap-container(
                 (   lib-view:nav(),
-                    lib-view:top-page-summary($uri, $doc),
+                    lib-view:top-page-summary($lib-view:URI, $doc),
                     lib-bootstrap:four-column-row(1,5,5,1, 
                         local:back-link(), 
                         lib-bootstrap:display-with-muted-text(5, " Start Time: ",  fn:string(($doc//m:start-time)[1])), 

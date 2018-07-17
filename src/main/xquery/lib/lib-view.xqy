@@ -12,28 +12,37 @@ declare variable $HOST := xdmp:get-request-field("host");
 declare variable $START-TIME := xdmp:get-request-field("st");
 declare variable $MODULE := fn:tokenize(fn:substring-before(xdmp:get-request-url(), "?"),"/")[last()];
 
-declare function lib-view:exec-query-get-uri($xpath, $start-time, $hostname) {
-  fn:base-uri(lib-view:exec-query($xpath, $start-time, $hostname))
+declare function lib-view:exec-query-get-uri($root-node-name, $start-time, $hostname) {
+  fn:base-uri(lib-view:exec-query($root-node-name, $start-time, $hostname))
 };
 
-declare function lib-view:exec-query($xpath, $start-time, $hostname) {
-  xdmp:log("foo: "|| $start-time || $hostname),
-  (: TODO - hard coded /m:database-statuses! :)
-  xdmp:log(
-cts:search(doc()/m:database-statuses,
+declare function lib-view:exec-query-get-uri($start-time, $hostname) {
+  fn:base-uri(lib-view:exec-query($start-time, $hostname))
+};
+
+declare function lib-view:exec-query($root-node-name, $start-time, $hostname) {
+  if ($root-node-name eq "database-statuses")
+    then (cts:search(doc()/m:database-statuses, lib-view:and-query($start-time, $hostname)))
+  else if ($root-node-name eq "forest-statuses")
+    then (cts:search(doc()/m:forest-statuses, lib-view:and-query($start-time, $hostname)))
+  else if ($root-node-name eq "server-statuses")
+    then (cts:search(doc()/m:server-statuses, lib-view:and-query($start-time, $hostname)))
+    (: else if ($root-node-name eq "")
+      then () :)
+  else ()
+};
+
+declare function lib-view:exec-query($start-time, $hostname) {
+  lib-view:exec-query(name(doc($URI)/*), $start-time, $hostname)
+};
+
+
+declare function lib-view:and-query($start-time, $hostname) {
   cts:and-query((
     cts:element-range-query(xs:QName("m:start-time"), "=", xs:dateTime($start-time)),
     cts:element-value-query(xs:QName("m:period"), "raw"),
     cts:element-value-query(xs:QName("m:host-name"), $hostname)
-  )))),
-
-  cts:search(doc()/m:database-statuses,
-    cts:and-query((
-      cts:element-range-query(xs:QName("m:start-time"), "=", xs:dateTime($start-time)),
-      cts:element-value-query(xs:QName("m:period"), "raw"),
-      cts:element-value-query(xs:QName("m:host-name"), $hostname)
-    ))
-  )
+  ))
 };
 
 declare function lib-view:output-td-if-available($node as node()?){
@@ -78,9 +87,7 @@ declare function lib-view:nav() {
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarHostDropdown">
           {for $i in cts:element-values(xs:QName("m:host-name"))
-          
-            (: TODO - hard coded XPath - "x" :)
-            return lib-view:build-href(lib-view:is-active($i, $HOST), $MODULE, lib-view:exec-query-get-uri("x", $START-TIME, $i), $START-TIME, $i, $i)
+            return lib-view:build-href(lib-view:is-active($i, $HOST), $MODULE, lib-view:exec-query-get-uri($START-TIME, $i), $START-TIME, $i, $i)
           }
         </div>
       </li>
@@ -89,7 +96,11 @@ declare function lib-view:nav() {
           Raw Type
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="nav-link disabled" href="#">TODO</a> 
+          {
+            lib-view:build-href("nav-link", "databases.xqy", lib-view:exec-query-get-uri("database-statuses", $START-TIME, $HOST), $START-TIME, $HOST, "Databases"),
+            lib-view:build-href("nav-link", "forest.xqy", lib-view:exec-query-get-uri("forest-statuses", $START-TIME, $HOST), $START-TIME, $HOST, "Forests"),
+            lib-view:build-href("nav-link", "server.xqy", lib-view:exec-query-get-uri("server-statuses", $START-TIME, $HOST), $START-TIME, $HOST, "Servers")
+          }
         </div>
       </li>
       <!-- li class="nav-item">

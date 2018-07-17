@@ -15,14 +15,15 @@ declare function local:create-groups() {
     (: let $step := "PT"||$i||"H" :)
     return element div { 
         attribute class {"col"}, 
+        element h6 {fn:substring-before(fn:string($first-start-datetime + xs:dayTimeDuration("PT"||$i - 1||"H")), "T")},
         element ul { 
             for $j in cts:element-values(xs:QName("m:start-time"), (), (),
                 cts:and-query((
                     cts:element-range-query(xs:QName("m:start-time"), ">=", $first-start-datetime + xs:dayTimeDuration("PT"||$i - 1||"H")),
-                    cts:element-range-query(xs:QName("m:start-time"), "<=", xs:dateTime($first-start-datetime + xs:dayTimeDuration("PT"||$i||"H")))
+                    cts:element-range-query(xs:QName("m:start-time"), "<", xs:dateTime($first-start-datetime + xs:dayTimeDuration("PT"||$i||"H")))
                 ))
             )
-            return element li {element a {attribute href {"/detail.xqy?st="||$j}, $j}}
+            return element li {element a {attribute href {"/detail.xqy?st="||$j}, fn:substring-after(fn:string($j), "T")}}
         }
     }
 };
@@ -30,6 +31,8 @@ declare function local:create-groups() {
 lib-bootstrap:create-starter-template("Start times",
     lib-bootstrap:bootstrap-container(
         (   lib-view:nav(),
+            element h3 {"Hourly"},
+            element p {"TODO"},
             element h3 {"Start Times"},
             element div {
                 attribute class {"row"},
