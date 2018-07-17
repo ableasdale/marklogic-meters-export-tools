@@ -51,7 +51,7 @@ declare function lib-view:output-td-if-available($node as node()?){
     else element td {attribute class {"text-muted"}, "N/A"}
 };
 
-declare function lib-view:build-href($classname as xs:string, $module as xs:string, $uri as xs:string, $start-time as xs:string, $host as xs:string, $linktext as xs:string) {
+declare function lib-view:build-href($classname as xs:string, $module as xs:string, $uri as xs:string, $start-time as xs:string, $host as xs:string, $linktext as xs:string) as element(a) {
   element a {attribute class {$classname}, attribute href{"/"||$module||"?uri="||$uri||"&amp;st="||$start-time||"&amp;host="||$host},$linktext}
 };
 
