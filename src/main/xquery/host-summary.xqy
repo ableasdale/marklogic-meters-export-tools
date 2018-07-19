@@ -7,13 +7,12 @@ declare namespace m = "http://marklogic.com/manage/meters";
 declare namespace cts = "http://marklogic.com/cts";
 declare namespace xdmp = "http://marklogic.com/xdmp";
 
-declare variable $hostname := xdmp:get-request-field("hostname"); 
 
 declare function local:get-doc-for-time($start-time){
     cts:search(doc()/m:host-statuses,
         cts:and-query((
             cts:element-range-query(xs:QName("m:start-time"), "=", $start-time),
-            cts:element-value-query(xs:QName("m:host-name"), $hostname)
+            cts:element-value-query(xs:QName("m:host-name"), $lib-view:HOST)
         ))
     )[1]
 };
@@ -58,11 +57,11 @@ declare function local:table($start-times) {
 };
 
 
-lib-bootstrap:create-starter-template("Host Summary: "||$hostname,
+lib-bootstrap:create-starter-template("Host Summary: "||$lib-view:HOST,
     lib-bootstrap:bootstrap-container(
         (   
             lib-view:nav(),
-            element h3 {$hostname},
+            element h3 {$lib-view:HOST},
             local:table(cts:element-values(xs:QName("m:start-time"))
         ))
     )

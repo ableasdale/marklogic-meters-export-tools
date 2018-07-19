@@ -6,9 +6,9 @@ import module namespace lib-bootstrap = "http://www.xmlmachines.com/lib-bootstra
 declare namespace m = "http://marklogic.com/manage/meters";
 declare namespace xdmp = "http://marklogic.com/xdmp";
 
-declare variable $uri := xdmp:get-request-field("uri"); (: TODO :)
-declare variable $doc := fn:doc($uri);
-
+declare variable $doc := if (string-length($lib-view:URI) gt 0) 
+then (fn:doc($lib-view:URI))
+else ();
 
 declare function local:process-row($i) {
 (:$i//m:start-time,
@@ -48,7 +48,7 @@ lib-bootstrap:create-starter-template("Host status for host: "|| fn:string($doc/
         lib-bootstrap:bootstrap-container(
                 (
                     lib-view:nav(),
-                    lib-view:top-page-summary($uri, $doc),
+                    lib-view:top-page-summary($lib-view:URI, $doc),
                     
                     lib-bootstrap:display-with-muted-text(5, "Start Time: ",  fn:string(($doc//m:start-time)[1])   ),
                     lib-bootstrap:display-with-muted-text(5, "End Time: ",  fn:string(($doc//m:end-time)[1])   ),(:order by xs:dateTime($i) descending return $i),:)

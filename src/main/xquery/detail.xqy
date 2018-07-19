@@ -31,7 +31,7 @@ lib-bootstrap:create-starter-template("Details for Start Time: "||$start-time,
         (:)element h3 {"Start Time:", element small {$start-time}} :)
 
             for $i in cts:element-values(xs:QName("m:host-name"))
-            return lib-bootstrap:card-with-header(element a {attribute href {"/host-summary.xqy?hostname="||$i}, $i}, element ul {
+            return lib-bootstrap:card-with-header(element a {attribute href {"/host-summary.xqy?host="||$i}, $i}, element ul {
                 for $j in cts:search(doc(), cts:and-query( ($range-query, cts:element-value-query(xs:QName("m:host-name"), $i))) )
                 return local:process-link ($j, $i)
             })

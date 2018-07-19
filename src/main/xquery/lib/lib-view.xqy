@@ -9,7 +9,7 @@ declare namespace cts = "http://marklogic.com/cts";
 
 declare variable $URI := xdmp:get-request-field("uri");
 declare variable $HOST := xdmp:get-request-field("host");
-declare variable $START-TIME := xdmp:get-request-field("st");
+declare variable $START-TIME := xdmp:get-request-field("st", fn:string(cts:element-values(xs:QName("m:start-time"), (), ("ascending", "limit=1"))));
 declare variable $MODULE := fn:tokenize(fn:substring-before(xdmp:get-request-url(), "?"),"/")[last()];
 
 declare function lib-view:exec-query-get-uri($root-node-name, $start-time, $hostname) {
@@ -27,6 +27,8 @@ declare function lib-view:exec-query($root-node-name, $start-time, $hostname) {
     then (cts:search(doc()/m:forest-statuses, lib-view:and-query($start-time, $hostname)))
   else if ($root-node-name eq "server-statuses")
     then (cts:search(doc()/m:server-statuses, lib-view:and-query($start-time, $hostname)))
+  else if ($root-node-name eq "host-statuses")
+    then (cts:search(doc()/m:host-statuses, lib-view:and-query($start-time, $hostname)))
     (: else if ($root-node-name eq "")
       then () :)
   else ()
@@ -97,9 +99,10 @@ declare function lib-view:nav() {
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
           {
-            lib-view:build-href("nav-link", "databases.xqy", lib-view:exec-query-get-uri("database-statuses", $START-TIME, $HOST), $START-TIME, $HOST, "Databases"),
-            lib-view:build-href("nav-link", "forest.xqy", lib-view:exec-query-get-uri("forest-statuses", $START-TIME, $HOST), $START-TIME, $HOST, "Forests"),
-            lib-view:build-href("nav-link", "server.xqy", lib-view:exec-query-get-uri("server-statuses", $START-TIME, $HOST), $START-TIME, $HOST, "Servers")
+            lib-view:build-href(lib-view:is-active("databases.xqy", $MODULE), "databases.xqy", lib-view:exec-query-get-uri("database-statuses", $START-TIME, $HOST), $START-TIME, $HOST, "Databases"),
+            lib-view:build-href(lib-view:is-active("forest.xqy", $MODULE), "forest.xqy", lib-view:exec-query-get-uri("forest-statuses", $START-TIME, $HOST), $START-TIME, $HOST, "Forests"),
+            lib-view:build-href(lib-view:is-active("server.xqy", $MODULE), "server.xqy", lib-view:exec-query-get-uri("server-statuses", $START-TIME, $HOST), $START-TIME, $HOST, "Servers"),
+            lib-view:build-href(lib-view:is-active("host.xqy", $MODULE), "host.xqy", lib-view:exec-query-get-uri("host-statuses", $START-TIME, $HOST), $START-TIME, $HOST, "Hosts")
           }
         </div>
       </li>
