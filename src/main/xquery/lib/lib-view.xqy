@@ -8,7 +8,7 @@ declare namespace xdmp = "http://marklogic.com/xdmp";
 declare namespace cts = "http://marklogic.com/cts";
 
 declare variable $URI := xdmp:get-request-field("uri");
-declare variable $HOST := xdmp:get-request-field("host");
+declare variable $HOST := xdmp:get-request-field("host", fn:string(cts:element-values(xs:QName("m:host-name"), (), ("ascending", "limit=1"))));
 declare variable $START-TIME := xdmp:get-request-field("st", fn:string(cts:element-values(xs:QName("m:start-time"), (), ("ascending", "limit=1"))));
 declare variable $MODULE := fn:tokenize(fn:substring-before(xdmp:get-request-url(), "?"),"/")[last()];
 
@@ -31,7 +31,8 @@ declare function lib-view:exec-query($root-node-name, $start-time, $hostname) {
     then (cts:search(doc()/m:host-statuses, lib-view:and-query($start-time, $hostname)))
     (: else if ($root-node-name eq "")
       then () :)
-  else ()
+      (: TODO - does this work? :)
+  else (cts:search(doc()/m:host-statuses, lib-view:and-query($start-time, $hostname)))
 };
 
 declare function lib-view:exec-query($start-time, $hostname) {
@@ -70,7 +71,7 @@ declare function lib-view:is-active($item1 as xs:string, $item2 as xs:string) as
 
 declare function lib-view:nav() {
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <a class="navbar-brand" href="#">ML-LOGO</a>
+  <a class="navbar-brand" href="https://www.marklogic.com"><img style="max-width:150px;" id="nav-logo" src="/assets/images/marklogic.png"/></a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
