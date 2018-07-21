@@ -252,3 +252,19 @@ xdmp.toJSON(
 	}
 */
 
+/* NodeBuilder nb = new NodeBuilder(); nb.startDocument().endDocument(); nb.toNode().xpath("collection()/whatever");
+ 
+
+  cts.search( cts.andQuery([ cts.collectionQuery("TRIP"), cts.elementValueQuery( fn.QName("http://marklogic.com/edl","Report"), "*","wildcarded")]))
+
+Iterating through a sequence notes:
+let list = cts.elementValues(fn.QName("http://marklogic.com/manage/meters","start-time"), null, ['limit=3']);
+var value2
+
+for (let value of list) {
+  value2+= value;
+}
+
+value2;
+
+  */
