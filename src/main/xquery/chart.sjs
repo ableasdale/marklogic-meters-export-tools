@@ -27,36 +27,33 @@ for (let value of list) {
 xdmp.setResponseContentType("application/json"),
 xdmp.toJSON(
 {
-		"data": [
-			{
-				"mode": "lines", 
-				"y": iowaitTimes, 
-				"x": cts.elementValues(fn.QName("http://marklogic.com/manage/meters","start-time")), 
-				"line": { 
-					"shape": "spline"
-				}, 
-				"type": "scatter", 
-				"name": "iowait"
-			}
-			
-		], 
-		"layout": {
-			"autosize": true, 
-			// TODO - WIDTH HARD CODED!
-			"width" : "1550",
-			"title": "CPU % iowait times", 
-
-		
-			"yaxis": {
-				"title": "Y AXIS TITLE"
+	"data": [
+		{
+			"mode": "lines", 
+			"y": iowaitTimes, 
+			"x": cts.elementValues(fn.QName("http://marklogic.com/manage/meters","start-time")), 
+			"line": { 
+				"shape": "spline"
 			}, 
-			
-			"xaxis": {
-				"title": "X AXIS TITLE" 
-			}
+			"type": "scatter", 
+			"name": "iowait"
+		}
+	], 
+	"layout": {
+		"autosize": true, 
+		// TODO - WIDTH HARD CODED!
+		"width" : "1550",
+		"title": "CPU % iowait times", 
+		
+		"yaxis": {
+			"title": "Y AXIS TITLE"
+		}, 
+		
+		"xaxis": {
+			"title": "X AXIS TITLE" 
 		}
 	}
-);
+});
 
 
 // --- IGNORE BELOW
