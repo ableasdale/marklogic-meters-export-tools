@@ -1,25 +1,28 @@
+
+const hostname = xdmp.getRequestField("host")
+
 function getIoWait(dateTime) {
-for (const x of cts.search(
-        cts.andQuery([
-            cts.elementRangeQuery(fn.QName("http://marklogic.com/manage/meters","start-time"), "=", dateTime),
-            cts.elementQuery(fn.QName("http://marklogic.com/manage/meters", "host-statuses"), cts.andQuery([])),
-            cts.elementValueQuery(fn.QName("http://marklogic.com/manage/meters","period"), "raw"),
-            // TODO - host is hard coded for now
-            cts.elementValueQuery(fn.QName("http://marklogic.com/manage/meters","host-name"), "dbslp0872.uhc.com")
-        ])
-    )) {
-	var iowait = x.xpath('//*:total-cpu-stat-iowait');
-  	return fn.data(iowait);
-}
+	for (const x of cts.search(
+			cts.andQuery([
+				cts.elementRangeQuery(fn.QName("http://marklogic.com/manage/meters","start-time"), "=", dateTime),
+				cts.elementQuery(fn.QName("http://marklogic.com/manage/meters", "host-statuses"), cts.andQuery([])),
+				cts.elementValueQuery(fn.QName("http://marklogic.com/manage/meters","period"), "raw"),
+				cts.elementValueQuery(fn.QName("http://marklogic.com/manage/meters","host-name"), hostname)
+			])
+		)
+	) 
+	{
+		var iowait = x.xpath('//*:total-cpu-stat-iowait');
+		return fn.data(iowait);
+	}
 }
 
 let list = cts.elementValues(fn.QName("http://marklogic.com/manage/meters","start-time"), null, ['ascending']);
-var value2 = new Array();
+var iowaitTimes = new Array();
 
 for (let value of list) {
-  value2.push(getIoWait(value));
+  iowaitTimes.push(getIoWait(value));
 }
-
 
 xdmp.setResponseContentType("application/json"),
 xdmp.toJSON(
@@ -27,7 +30,7 @@ xdmp.toJSON(
 		"data": [
 			{
 				"mode": "lines", 
-				"y": value2, 
+				"y": iowaitTimes, 
 				"x": cts.elementValues(fn.QName("http://marklogic.com/manage/meters","start-time")), 
 				"line": { 
 					"shape": "spline"
@@ -39,14 +42,15 @@ xdmp.toJSON(
 		], 
 		"layout": {
 			"autosize": true, 
-			"title": "title here", 
-		
+			// TODO - WIDTH HARD CODED!
+			"width" : "1550",
+			"title": "CPU % iowait times", 
+
 		
 			"yaxis": {
 				"title": "Y AXIS TITLE"
 			}, 
-			"height": 450, 
-			"width": 1000, 
+			
 			"xaxis": {
 				"title": "X AXIS TITLE" 
 			}

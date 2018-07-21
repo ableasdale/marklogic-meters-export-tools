@@ -11,9 +11,10 @@ declare function local:get-doc-for-time($start-time){
     cts:search(doc()/m:host-statuses,
         cts:and-query((
             cts:element-range-query(xs:QName("m:start-time"), "=", $start-time),
+            cts:element-value-query(xs:QName("m:period"), "raw"),
             cts:element-value-query(xs:QName("m:host-name"), $lib-view:HOST)
         ))
-    )[1]
+    )
 };
 
 declare function local:process-start-times($start-times) {
@@ -60,7 +61,7 @@ lib-bootstrap:create-starter-template("Host Summary: "||$lib-view:HOST,
         (   
             lib-view:nav(),
             element h3 {$lib-view:HOST},
-            <div id="root">{" "}</div>,
+            <div class="row" style="border: 5px solid black" id="root">{" "}</div>,
             local:table(cts:element-values(xs:QName("m:start-time")))
         )
     ), <script src="/chart.js">{"  "}</script>
