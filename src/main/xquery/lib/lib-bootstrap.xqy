@@ -30,6 +30,10 @@ declare function lib-bootstrap:create-starter-template($title as xs:string, $con
             <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.39.0/codemirror.js">{" "}</script>
             <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.39.0/mode/xml/xml.min.js">{" "}</script>
             <script src="https://cdn.plot.ly/plotly-latest.min.js">{" "}</script>
+            <script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin="anonymous">{" "}</script>
+            <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin="anonymous">{" "}</script>
+            <script crossorigin="anonymous" src="https://unpkg.com/react-plotly.js@latest/dist/create-plotly-component.js">{" "}</script>
+
             <!-- Optional JavaScript -->
             {if(fn:empty($javascript)) then "" else $javascript}
         </body>
