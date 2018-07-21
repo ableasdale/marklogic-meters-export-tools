@@ -1,4 +1,16 @@
-
+function getIoWait(dateTime) {
+  cts.search(
+        cts.andQuery([
+            cts.elementRangeQuery(fn.QName("http://marklogic.com/manage/meters","start-time"), "=", dateTime),
+            cts.elementQuery(fn.QName("http://marklogic.com/manage/meters", "host-statuses"), cts.andQuery([])),
+            cts.elementValueQuery(fn.QName("http://marklogic.com/manage/meters","period"), "raw"),
+            // TODO - host is hard coded for now
+            cts.elementValueQuery(fn.QName("http://marklogic.com/manage/meters","host-name"), "dbslp0872.uhc.com")
+        ])
+    )
+	var iowait = x.xpath('//*:total-cpu-stat-iowait');
+  	return fn.data(iowait);
+}
 
 xdmp.setResponseContentType("application/json"),
 // [cts.elementValues(fn.QName("http://marklogic.com/manage/meters","start-time")))]
@@ -266,5 +278,13 @@ for (let value of list) {
 }
 
 value2;
+
+
+for (const x of fn.doc()) {
+  var ssn = x.xpath('//Position')
+  if(ssn.toString().length) {
+      ssns.push(xdmp.nodeUri(x) + " || " + ssn.toString() + " || " + (typeof(ssn)))
+  }
+}
 
   */
