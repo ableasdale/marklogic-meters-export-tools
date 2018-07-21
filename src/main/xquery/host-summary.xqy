@@ -65,16 +65,6 @@ lib-bootstrap:create-starter-template("Host Summary: "||$lib-view:HOST,
             <div id="like_button_container">{" "}</div>,
             local:table(cts:element-values(xs:QName("m:start-time")))
         )),    
-        (<script src="/chart.js">{"  "}</script>,<script src="like_button.js">{" "}</script>)
+        (<script src="/chart2.js">{"  "}</script>)
     )
-
-    (: <script>
-    <![CDATA[
-	TESTER = document.getElementById('tester');
-	Plotly.plot( TESTER, [{
-	x: [1, 2, 3, 4, 5],
-	y: [1, 2, 4, 8, 16] }], {
-	margin: { t: 0 } } );
-    ]]>
-    </script> :)
  
