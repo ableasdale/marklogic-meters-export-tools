@@ -8,6 +8,7 @@ declare namespace xdmp = "http://marklogic.com/xdmp";
 declare namespace cts = "http://marklogic.com/cts";
 
 declare variable $URI := xdmp:get-request-field("uri");
+declare variable $DATABASE := xdmp:get-request-field("db", fn:string(cts:element-values(xs:QName("m:database-name"), (), ("ascending", "limit=1"))));
 declare variable $HOST := xdmp:get-request-field("host", fn:string(cts:element-values(xs:QName("m:host-name"), (), ("ascending", "limit=1"))));
 declare variable $START-TIME := xdmp:get-request-field("st", fn:string(cts:element-values(xs:QName("m:start-time"), (), ("ascending", "limit=1"))));
 declare variable $MODULE := fn:tokenize(fn:substring-before(xdmp:get-request-url(), "?"),"/")[last()];
@@ -34,6 +35,7 @@ declare function lib-view:exec-query($root-node-name, $start-time, $hostname) {
       (: TODO - does this work? :)
   else (cts:search(doc()/m:host-statuses, lib-view:and-query($start-time, $hostname)))
 };
+
 
 declare function lib-view:exec-query($start-time, $hostname) {
   lib-view:exec-query(name(doc($URI)/*), $start-time, $hostname)
@@ -107,9 +109,20 @@ declare function lib-view:nav() {
           }
         </div>
       </li>
-      <!-- li class="nav-item">
-        <a class="nav-link disabled" href="#">Disabled</a>
-      </li -->
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarSummaryDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Summaries
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarSummaryDropdown">
+          {
+            lib-view:build-href(lib-view:is-active("database-summary.xqy", $MODULE), "database-summary.xqy", lib-view:exec-query-get-uri("database-statuses", $START-TIME, $HOST), $START-TIME, $HOST, "By Database"),
+            (: lib-view:build-href(lib-view:is-active("forest.xqy", $MODULE), "forest.xqy", lib-view:exec-query-get-uri("forest-statuses", $START-TIME, $HOST), $START-TIME, $HOST, "Forests"),
+            lib-view:build-href(lib-view:is-active("server.xqy", $MODULE), "server.xqy", lib-view:exec-query-get-uri("server-statuses", $START-TIME, $HOST), $START-TIME, $HOST, "Servers"), :)
+            lib-view:build-href(lib-view:is-active("host-summary.xqy", $MODULE), "host-summary.xqy", lib-view:exec-query-get-uri("host-statuses", $START-TIME, $HOST), $START-TIME, $HOST, "By Host")
+          }
+        </div>
+      </li>
+      {lib-view:contextual-menu()}
     </ul>
     <form class="form-inline my-2 my-lg-0">
       <input class="form-control mr-sm-2" type="search" placeholder="TODO: Search" aria-label="Search"/>
@@ -122,4 +135,20 @@ declare function lib-view:nav() {
 declare function lib-view:top-page-summary($uri, $doc) {
     lib-bootstrap:display-with-muted-text(5, "Meters File URI: ", $uri),
     lib-bootstrap:two-column-row(6,6,lib-bootstrap:display-with-muted-text(5, "Host Name: ", fn:string($doc//m:host-name)), lib-bootstrap:display-with-muted-text(5, "Group: ",  fn:string(($doc//m:group-name)[1])))
+};
+
+declare function lib-view:contextual-menu(){
+  if ($MODULE eq "database-summary.xqy")
+  then (
+    <li class="nav-item dropdown">
+      <a class="nav-link dropdown-toggle" href="#" id="navbarContextualDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Databases
+      </a>
+      <div class="dropdown-menu" aria-labelledby="navbarContextualDropdown">
+        {for $i in cts:element-values(xs:QName("m:database-name"))
+          return lib-view:build-href(lib-view:is-active($i, $DATABASE), $MODULE, lib-view:exec-query-get-uri($START-TIME, $i), $START-TIME, $i, $i)
+        }
+      </div>
+    </li>)
+  else ()
 };

@@ -29,6 +29,7 @@ declare function lib-bootstrap:create-starter-template($title as xs:string, $con
             <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js" integrity="sha384-o+RDsa0aLu++PJvFqy8fFScvbHFLtbvScb8AjopnFD+iEQ7wo/CG0xlczd+2O/em" crossorigin="anonymous">{" "}</script>
             <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.39.0/codemirror.js">{" "}</script>
             <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.39.0/mode/xml/xml.min.js">{" "}</script>
+            <script src="https://cdn.plot.ly/plotly-latest.min.js">{" "}</script>
             <!-- Optional JavaScript -->
             {if(fn:empty($javascript)) then "" else $javascript}
         </body>

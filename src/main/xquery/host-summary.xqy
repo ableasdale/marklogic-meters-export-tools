@@ -7,7 +7,6 @@ declare namespace m = "http://marklogic.com/manage/meters";
 declare namespace cts = "http://marklogic.com/cts";
 declare namespace xdmp = "http://marklogic.com/xdmp";
 
-
 declare function local:get-doc-for-time($start-time){
     cts:search(doc()/m:host-statuses,
         cts:and-query((
@@ -62,7 +61,18 @@ lib-bootstrap:create-starter-template("Host Summary: "||$lib-view:HOST,
         (   
             lib-view:nav(),
             element h3 {$lib-view:HOST},
-            local:table(cts:element-values(xs:QName("m:start-time"))
-        ))
+            <div id="tester" style="width:600px;height:250px;">{" "}</div>,
+            local:table(cts:element-values(xs:QName("m:start-time")))
+        )),    
+        <script>
+    <![CDATA[
+	TESTER = document.getElementById('tester');
+	Plotly.plot( TESTER, [{
+	x: [1, 2, 3, 4, 5],
+	y: [1, 2, 4, 8, 16] }], {
+	margin: { t: 0 } } );
+    ]]>
+    </script>
+
     )
-)
+ 
