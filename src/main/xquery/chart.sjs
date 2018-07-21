@@ -1,5 +1,5 @@
 function getIoWait(dateTime) {
-  cts.search(
+for (const x of cts.search(
         cts.andQuery([
             cts.elementRangeQuery(fn.QName("http://marklogic.com/manage/meters","start-time"), "=", dateTime),
             cts.elementQuery(fn.QName("http://marklogic.com/manage/meters", "host-statuses"), cts.andQuery([])),
@@ -7,29 +7,27 @@ function getIoWait(dateTime) {
             // TODO - host is hard coded for now
             cts.elementValueQuery(fn.QName("http://marklogic.com/manage/meters","host-name"), "dbslp0872.uhc.com")
         ])
-    )
+    )) {
 	var iowait = x.xpath('//*:total-cpu-stat-iowait');
   	return fn.data(iowait);
 }
+}
+
+let list = cts.elementValues(fn.QName("http://marklogic.com/manage/meters","start-time"), null, ['ascending']);
+var value2 = new Array();
+
+for (let value of list) {
+  value2.push(getIoWait(value));
+}
+
 
 xdmp.setResponseContentType("application/json"),
-// [cts.elementValues(fn.QName("http://marklogic.com/manage/meters","start-time")))]
 xdmp.toJSON(
 {
 		"data": [
 			{
 				"mode": "lines", 
-				"y": [
-					"0", 
-					"45560506.663365364", 
-					"91145081.21192169", 
-					"232447635.15836716", 
-					"580348915.5698586", 
-					"1182888421.2842617", 
-					"1928559640.2194986", 
-					"2578825762.2643065", 
-					"3022276546.8773637"
-				], 
+				"y": value2, 
 				"x": cts.elementValues(fn.QName("http://marklogic.com/manage/meters","start-time")), 
 				"line": { 
 					"shape": "spline"
@@ -55,6 +53,9 @@ xdmp.toJSON(
 		}
 	}
 );
+
+
+// --- IGNORE BELOW
 
 /*
 {
