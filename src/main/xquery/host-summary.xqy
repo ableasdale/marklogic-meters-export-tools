@@ -55,16 +55,14 @@ declare function local:table($start-times) {
     }
 };
 
-
 lib-bootstrap:create-starter-template("Host Summary: "||$lib-view:HOST,
     lib-bootstrap:bootstrap-container(
         (   
             lib-view:nav(),
             element h3 {$lib-view:HOST},
-            <div id="root" style="width:700px;height:450px;">{" "}</div>,
-            <div id="like_button_container">{" "}</div>,
+            <div id="root">{" "}</div>,
             local:table(cts:element-values(xs:QName("m:start-time")))
-        )),    
-        (<script src="/chart2.js">{"  "}</script>)
-    )
+        )
+    ), <script src="/chart.js">{"  "}</script>
+)
  
