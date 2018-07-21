@@ -1,7 +1,11 @@
 
 const hostname = xdmp.getRequestField("host")
 
-function getIoWait(dateTime) {
+let dateTimes = cts.elementValues(fn.QName("http://marklogic.com/manage/meters","start-time"), null, ['ascending']);
+var iowaitTimes = new Array();
+var writeLockRates = new Array();
+
+function pushValuesFor(dateTime) {
 	for (const x of cts.search(
 			cts.andQuery([
 				cts.elementRangeQuery(fn.QName("http://marklogic.com/manage/meters","start-time"), "=", dateTime),
@@ -13,15 +17,14 @@ function getIoWait(dateTime) {
 	) 
 	{
 		var iowait = x.xpath('//*:total-cpu-stat-iowait');
-		return fn.data(iowait);
+		iowaitTimes.push(fn.data(iowait));
+		var writeLockRate = x.xpath('//*:write-lock-rate');
+		writeLockRates.push(fn.data(writeLockRate));
 	}
 }
 
-let list = cts.elementValues(fn.QName("http://marklogic.com/manage/meters","start-time"), null, ['ascending']);
-var iowaitTimes = new Array();
-
-for (let value of list) {
-  iowaitTimes.push(getIoWait(value));
+for (let dateTime of dateTimes) {
+  pushValuesFor(dateTime);
 }
 
 xdmp.setResponseContentType("application/json"),
@@ -31,19 +34,29 @@ xdmp.toJSON(
 		{
 			"mode": "lines", 
 			"y": iowaitTimes, 
-			"x": cts.elementValues(fn.QName("http://marklogic.com/manage/meters","start-time")), 
+			"x": dateTimes, 
 			"line": { 
 				"shape": "spline"
 			}, 
 			"type": "scatter", 
 			"name": "iowait"
+		},
+		{
+			"mode": "lines", 
+			"y": writeLockRates, 
+			"x": dateTimes, 
+			"line": { 
+				"shape": "spline"
+			}, 
+			"type": "scatter", 
+			"name": "write lock rate"
 		}
 	], 
 	"layout": {
 		"autosize": true, 
 		// TODO - WIDTH HARD CODED!
 		"width" : "1550",
-		"title": "CPU % iowait times", 
+		"title": "CPU % iowait times / Write Lock Rate", 
 		
 		"yaxis": {
 			"title": "Y AXIS TITLE"
