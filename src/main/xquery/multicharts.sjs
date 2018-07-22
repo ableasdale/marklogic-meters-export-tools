@@ -3,7 +3,8 @@ const hostname = xdmp.getRequestField("host")
 const database = xdmp.getRequestField("db")
 
 let dateTimes = cts.elementValues(fn.QName("http://marklogic.com/manage/meters","start-time"), null, ['ascending']);
-var iowaitTimes = new Array();
+var listCacheMisses = new Array();
+var compressedTreeCacheMisses = new Array();
 
 function pushValuesFor(dateTime) {
 	xdmp.log("top of push vals for: "+dateTime+" | "+hostname+" | "+database, "debug");
@@ -16,14 +17,14 @@ function pushValuesFor(dateTime) {
 				cts.elementValueQuery(fn.QName("http://marklogic.com/manage/meters","database-name"), database)
 			])
 		)
-	) 
+	)
 	{	
-		//xdmp.log("search res:");
-		//xdmp.log(x);
-		var iowait = x.xpath('//*:database-status[*:database-name eq "'+database+'"]/*:master-aggregate/*:list-cache-misses');
-		iowaitTimes.push(fn.data(iowait));
+		var listCacheMissRecord = x.xpath('//*:database-status[*:database-name eq "'+database+'"]/*:master-aggregate/*:list-cache-misses');
+		listCacheMisses.push(fn.data(listCacheMissRecord));
+
+		var compressedTreeCacheMissRecord = x.xpath('//*:database-status[*:database-name eq "'+database+'"]/*:master-aggregate/*:compressed-tree-cache-misses');
+		compressedTreeCacheMisses.push(fn.data(compressedTreeCacheMissRecord));
 	}
-	// console.log(iowaitTimes);
 }
 
 for (let dateTime of dateTimes) {
@@ -32,41 +33,60 @@ for (let dateTime of dateTimes) {
 xdmp.setResponseContentType("application/json"),
 xdmp.toJSON(
 {
-	"data": [
-		{
-			"mode": "lines", 
-			"y": iowaitTimes, 
-			"x": dateTimes, 
-			"line": { 
-				"shape": "spline"
+	"0" : {
+		"data": [
+			{
+				"mode": "lines", 
+				"y": listCacheMisses, 
+				"x": dateTimes, 
+				"line": { 
+					"shape": "spline"
+				}, 
+				"type": "scatter", 
+				"name": "list-cache-misses"
+			}
+		], 
+		"layout": {
+			"autosize": true, 
+			// TODO - WIDTH HARD CODED!
+			"width" : "1400",
+			"title": "List Cache Misses for "+database, 
+			
+			"yaxis": {
+				"title": "Y AXIS TITLE"
 			}, 
-			"type": "scatter", 
-			"name": "list-cache-misses"
-		}
-		/*,
-		{
-			"mode": "lines", 
-			"y": writeLockRates, 
-			"x": dateTimes, 
-			"line": { 
-				"shape": "spline"
+			
+			"xaxis": {
+				"title": "X AXIS TITLE" 
+			}
+		}	
+	},
+	"1" : {
+		"data": [
+			{
+				"mode": "lines", 
+				"y": compressedTreeCacheMisses, 
+				"x": dateTimes, 
+				"line": { 
+					"shape": "spline"
+				}, 
+				"type": "scatter", 
+				"name": "compressed-tree-cache-misses"
+			}
+		], 
+		"layout": {
+			"autosize": true, 
+			// TODO - WIDTH HARD CODED!
+			"width" : "1400",
+			"title": "Compressed Tree Cache Misses for "+database, 
+			
+			"yaxis": {
+				"title": "Y AXIS TITLE"
 			}, 
-			"type": "scatter", 
-			"name": "write lock rate"
-		}*/
-	], 
-	"layout": {
-		"autosize": true, 
-		// TODO - WIDTH HARD CODED!
-		"width" : "1400",
-		"title": "List Cache Misses for "+database, 
-		
-		"yaxis": {
-			"title": "Y AXIS TITLE"
-		}, 
-		
-		"xaxis": {
-			"title": "X AXIS TITLE" 
+			
+			"xaxis": {
+				"title": "X AXIS TITLE" 
+			}
 		}
 	}
 });

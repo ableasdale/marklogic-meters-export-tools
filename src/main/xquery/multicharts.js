@@ -7,9 +7,14 @@ async function chart() {
     //console.dir(data.layout);
 
     ReactDOM.render(
-        React.createElement(Plot, data),
-        document.getElementById('root')
+        React.createElement(Plot, data[0]),
+        document.getElementById('root0')
       );
+
+    ReactDOM.render(
+        React.createElement(Plot, data[1]),
+        document.getElementById('root1')
+    );
 }
 
 chart();
