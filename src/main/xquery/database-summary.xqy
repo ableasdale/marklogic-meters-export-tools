@@ -22,7 +22,7 @@ declare function local:process-start-times($start-times) {
     element tbody {
         for $start-time in $start-times
         let $j := local:get-doc-for-time($start-time)//m:database-status[m:database-name eq $lib-view:DATABASE]
-        let $_ := xdmp:log($j)
+        (: let $_ := xdmp:log($j) :)
         return
             element tr {
                 element td {element a {attribute href {"/databases.xqy?uri="||fn:base-uri($j)},$start-time}},
@@ -54,7 +54,8 @@ lib-bootstrap:create-starter-template("Database Summary: "||$lib-view:HOST,
         (   
             lib-view:nav(),
             element h3 {$lib-view:HOST || " | " || $lib-view:DATABASE},
+            <div class="row" style="border: 5px solid black" id="root">{" "}</div>,
             local:table(cts:element-values(xs:QName("m:start-time")))           
         )
-    )
+    ), <script src="/multicharts.js">{"  "}</script>
 )

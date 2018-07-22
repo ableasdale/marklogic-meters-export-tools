@@ -1,32 +1,34 @@
 
 const hostname = xdmp.getRequestField("host")
+const database = xdmp.getRequestField("db")
 
 let dateTimes = cts.elementValues(fn.QName("http://marklogic.com/manage/meters","start-time"), null, ['ascending']);
 var iowaitTimes = new Array();
-var writeLockRates = new Array();
 
 function pushValuesFor(dateTime) {
+	xdmp.log("top of push vals for: "+dateTime+" | "+hostname+" | "+database, "debug");
 	for (const x of cts.search(
 			cts.andQuery([
 				cts.elementRangeQuery(fn.QName("http://marklogic.com/manage/meters","start-time"), "=", dateTime),
-				cts.elementQuery(fn.QName("http://marklogic.com/manage/meters", "host-statuses"), cts.andQuery([])),
+				cts.elementQuery(fn.QName("http://marklogic.com/manage/meters", "database-statuses"), cts.andQuery([])),
 				cts.elementValueQuery(fn.QName("http://marklogic.com/manage/meters","period"), "raw"),
-				cts.elementValueQuery(fn.QName("http://marklogic.com/manage/meters","host-name"), hostname)
+				cts.elementValueQuery(fn.QName("http://marklogic.com/manage/meters","host-name"), hostname),
+				cts.elementValueQuery(fn.QName("http://marklogic.com/manage/meters","database-name"), database)
 			])
 		)
 	) 
-	{
-		var iowait = x.xpath('//*:total-cpu-stat-iowait');
+	{	
+		//xdmp.log("search res:");
+		//xdmp.log(x);
+		var iowait = x.xpath('//*:database-status[*:database-name eq "'+database+'"]/*:master-aggregate/*:list-cache-misses');
 		iowaitTimes.push(fn.data(iowait));
-		var writeLockRate = x.xpath('//*:write-lock-rate');
-		writeLockRates.push(fn.data(writeLockRate));
 	}
+	// console.log(iowaitTimes);
 }
 
 for (let dateTime of dateTimes) {
   pushValuesFor(dateTime);
 }
-
 xdmp.setResponseContentType("application/json"),
 xdmp.toJSON(
 {
@@ -39,8 +41,9 @@ xdmp.toJSON(
 				"shape": "spline"
 			}, 
 			"type": "scatter", 
-			"name": "iowait"
-		},
+			"name": "list-cache-misses"
+		}
+		/*,
 		{
 			"mode": "lines", 
 			"y": writeLockRates, 
@@ -50,13 +53,13 @@ xdmp.toJSON(
 			}, 
 			"type": "scatter", 
 			"name": "write lock rate"
-		}
+		}*/
 	], 
 	"layout": {
 		"autosize": true, 
 		// TODO - WIDTH HARD CODED!
 		"width" : "1400",
-		"title": "CPU % iowait times / Write Lock Rate", 
+		"title": "List Cache Misses for "+database, 
 		
 		"yaxis": {
 			"title": "Y AXIS TITLE"
