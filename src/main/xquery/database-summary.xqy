@@ -11,12 +11,13 @@ declare function local:get-doc-for-time($start-time){
     cts:search(doc()/m:database-statuses,
         cts:and-query((
             cts:element-range-query(xs:QName("m:start-time"), "=", $start-time),
+            cts:element-value-query(xs:QName("m:period"), "raw"),
             cts:element-value-query(xs:QName("m:database-name"), $lib-view:DATABASE)
         ))
     )[1]
 };
 
-lib-bootstrap:create-starter-template("Host Summary: "||$lib-view:HOST,
+lib-bootstrap:create-starter-template("Database Summary: "||$lib-view:HOST,
     lib-bootstrap:bootstrap-container(
         (   
             lib-view:nav(),
