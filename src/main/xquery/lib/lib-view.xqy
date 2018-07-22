@@ -56,9 +56,9 @@ declare function lib-view:output-td-if-available($node as node()?){
     else element td {attribute class {"text-muted"}, "N/A"}
 };
 
-declare function lib-view:build-href($classname as xs:string, $module as xs:string, $uri as xs:string, $start-time as xs:string, $host as xs:string, $linktext as xs:string) as element(a) {
+declare function lib-view:build-href($classname as xs:string, $module as xs:string, $uri as xs:string, $start-time as xs:string, $host as xs:string, $db as xs:string, $linktext as xs:string) as element(a) {
   xdmp:log("build-href: "||$classname||" | "||$module||" | "||$uri,"debug"),
-  element a {attribute class {$classname}, attribute href{"/"||$module||"?uri="||$uri||"&amp;st="||$start-time||"&amp;host="||$host},$linktext}
+  element a {attribute class {$classname}, attribute href{"/"||$module||"?uri="||$uri||"&amp;st="||$start-time||"&amp;host="||$host||"&amp;db="||$db}, $linktext}
 };
 
 declare function lib-view:render-xml-doc($doc as document-node()){
@@ -94,7 +94,7 @@ declare function lib-view:nav() {
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarHostDropdown">
           {for $i in cts:element-values(xs:QName("m:host-name"))
-            return lib-view:build-href(lib-view:is-active($i, $HOST), $MODULE, lib-view:exec-query-get-uri($START-TIME, $i), $START-TIME, $i, $i)
+            return lib-view:build-href(lib-view:is-active($i, $HOST), $MODULE, lib-view:exec-query-get-uri($START-TIME, $i), $START-TIME, $i, $DATABASE, $i)
           }
         </div>
       </li>
@@ -104,10 +104,10 @@ declare function lib-view:nav() {
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
           {
-            lib-view:build-href(lib-view:is-active("databases.xqy", $MODULE), "databases.xqy", lib-view:exec-query-get-uri("database-statuses", $START-TIME, $HOST), $START-TIME, $HOST, "Databases"),
-            lib-view:build-href(lib-view:is-active("forest.xqy", $MODULE), "forest.xqy", lib-view:exec-query-get-uri("forest-statuses", $START-TIME, $HOST), $START-TIME, $HOST, "Forests"),
-            lib-view:build-href(lib-view:is-active("server.xqy", $MODULE), "server.xqy", lib-view:exec-query-get-uri("server-statuses", $START-TIME, $HOST), $START-TIME, $HOST, "Servers"),
-            lib-view:build-href(lib-view:is-active("host.xqy", $MODULE), "host.xqy", lib-view:exec-query-get-uri("host-statuses", $START-TIME, $HOST), $START-TIME, $HOST, "Hosts")
+            lib-view:build-href(lib-view:is-active("databases.xqy", $MODULE), "databases.xqy", lib-view:exec-query-get-uri("database-statuses", $START-TIME, $HOST), $START-TIME, $HOST, $DATABASE, "Databases"),
+            lib-view:build-href(lib-view:is-active("forest.xqy", $MODULE), "forest.xqy", lib-view:exec-query-get-uri("forest-statuses", $START-TIME, $HOST), $START-TIME, $HOST, $DATABASE, "Forests"),
+            lib-view:build-href(lib-view:is-active("server.xqy", $MODULE), "server.xqy", lib-view:exec-query-get-uri("server-statuses", $START-TIME, $HOST), $START-TIME, $HOST, $DATABASE, "Servers"),
+            lib-view:build-href(lib-view:is-active("host.xqy", $MODULE), "host.xqy", lib-view:exec-query-get-uri("host-statuses", $START-TIME, $HOST), $START-TIME, $HOST, $DATABASE, "Hosts")
           }
         </div>
       </li>
@@ -117,10 +117,10 @@ declare function lib-view:nav() {
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarSummaryDropdown">
           {
-            lib-view:build-href(lib-view:is-active("database-summary.xqy", $MODULE), "database-summary.xqy", lib-view:exec-query-get-uri("database-statuses", $START-TIME, $HOST), $START-TIME, $HOST, "By Database"),
+            lib-view:build-href(lib-view:is-active("database-summary.xqy", $MODULE), "database-summary.xqy", lib-view:exec-query-get-uri("database-statuses", $START-TIME, $HOST), $START-TIME, $HOST, $DATABASE, "By Database"),
             (: lib-view:build-href(lib-view:is-active("forest.xqy", $MODULE), "forest.xqy", lib-view:exec-query-get-uri("forest-statuses", $START-TIME, $HOST), $START-TIME, $HOST, "Forests"),
             lib-view:build-href(lib-view:is-active("server.xqy", $MODULE), "server.xqy", lib-view:exec-query-get-uri("server-statuses", $START-TIME, $HOST), $START-TIME, $HOST, "Servers"), :)
-            lib-view:build-href(lib-view:is-active("host-summary.xqy", $MODULE), "host-summary.xqy", lib-view:exec-query-get-uri("host-statuses", $START-TIME, $HOST), $START-TIME, $HOST, "By Host")
+            lib-view:build-href(lib-view:is-active("host-summary.xqy", $MODULE), "host-summary.xqy", lib-view:exec-query-get-uri("host-statuses", $START-TIME, $HOST), $START-TIME, $HOST, $DATABASE, "By Host")
           }
         </div>
       </li>
@@ -149,7 +149,7 @@ declare function lib-view:contextual-menu(){
       </a>
       <div class="dropdown-menu" aria-labelledby="navbarContextualDropdown">
         {for $i in cts:element-values(xs:QName("m:database-name"))
-          return lib-view:build-href(lib-view:is-active($i, $DATABASE), $MODULE, lib-view:exec-query-get-uri("database-statuses", $START-TIME, $HOST), $START-TIME, $i, $i)
+          return lib-view:build-href(lib-view:is-active($i, $DATABASE), $MODULE, lib-view:exec-query-get-uri("database-statuses", $START-TIME, $HOST), $START-TIME, $HOST, $i, $i)
         }
       </div>
     </li>)
