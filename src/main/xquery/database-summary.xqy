@@ -53,7 +53,7 @@ lib-bootstrap:create-starter-template("Database Summary: "||$lib-view:HOST,
     lib-bootstrap:bootstrap-container(
         (   
             lib-view:nav(),
-            element h3 {$lib-view:DATABASE},
+            element h3 {$lib-view:HOST || " | " || $lib-view:DATABASE},
             local:table(cts:element-values(xs:QName("m:start-time")))           
         )
     )
