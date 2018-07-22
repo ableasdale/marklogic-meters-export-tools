@@ -5,6 +5,8 @@ const database = xdmp.getRequestField("db")
 let dateTimes = cts.elementValues(fn.QName("http://marklogic.com/manage/meters","start-time"), null, ['ascending']);
 var listCacheMisses = new Array();
 var compressedTreeCacheMisses = new Array();
+var activeFragmentCounts = new Array();
+var writeLockCounts = new Array();
 
 function pushValuesFor(dateTime) {
 	xdmp.log("top of push vals for: "+dateTime+" | "+hostname+" | "+database, "debug");
@@ -24,6 +26,12 @@ function pushValuesFor(dateTime) {
 
 		var compressedTreeCacheMissRecord = x.xpath('//*:database-status[*:database-name eq "'+database+'"]/*:master-aggregate/*:compressed-tree-cache-misses');
 		compressedTreeCacheMisses.push(fn.data(compressedTreeCacheMissRecord));
+
+		var activeFragmentRecord = x.xpath('//*:database-status[*:database-name eq "'+database+'"]/*:master-aggregate/*:active-fragment-count');
+		activeFragmentCounts.push(fn.data(activeFragmentRecord));
+
+		var writeLockRecord = x.xpath('//*:database-status[*:database-name eq "'+database+'"]/*:master-aggregate/*:write-lock-count');
+		writeLockCounts.push(fn.data(writeLockRecord));
 	}
 }
 
@@ -88,7 +96,63 @@ xdmp.toJSON(
 				"title": "X AXIS TITLE" 
 			}
 		}
-	}
+	},
+	"2" : {
+		"data": [
+			{
+				"mode": "lines", 
+				"y": activeFragmentCounts, 
+				"x": dateTimes, 
+				"line": { 
+					"shape": "spline"
+				}, 
+				"type": "scatter", 
+				"name": "active-fragment-count"
+			}
+		], 
+		"layout": {
+			"autosize": true, 
+			// TODO - WIDTH HARD CODED!
+			"width" : "1400",
+			"title": "Active Fragment Counts for "+database, 
+			
+			"yaxis": {
+				"title": "Y AXIS TITLE"
+			}, 
+			
+			"xaxis": {
+				"title": "X AXIS TITLE" 
+			}
+		}
+	},
+	"3" : {
+		"data": [
+			{
+				"mode": "lines", 
+				"y": writeLockCounts, 
+				"x": dateTimes, 
+				"line": { 
+					"shape": "spline"
+				}, 
+				"type": "scatter", 
+				"name": "write-lock-count"
+			}
+		], 
+		"layout": {
+			"autosize": true, 
+			// TODO - WIDTH HARD CODED!
+			"width" : "1400",
+			"title": "Write Lock Counts for "+database, 
+			
+			"yaxis": {
+				"title": "Y AXIS TITLE"
+			}, 
+			
+			"xaxis": {
+				"title": "X AXIS TITLE" 
+			}
+		}
+	},
 });
 
 
