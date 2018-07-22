@@ -22,22 +22,17 @@ declare function lib-view:exec-query-get-uri($start-time, $hostname) {
 };
 
 declare function lib-view:exec-query($root-node-name, $start-time, $hostname) {
-  xdmp:log($MODULE),
-  xdmp:log($root-node-name),
+  xdmp:log($MODULE,"debug"),
+  xdmp:log($root-node-name,"debug"),
   if ($root-node-name eq "database-statuses")
     then (cts:search(doc()/m:database-statuses, lib-view:and-query($start-time, $hostname)))
   else if ($root-node-name eq "forest-statuses")
     then (cts:search(doc()/m:forest-statuses, lib-view:and-query($start-time, $hostname)))
   else if ($root-node-name eq "server-statuses")
     then (cts:search(doc()/m:server-statuses, lib-view:and-query($start-time, $hostname)))
-  else if ($root-node-name eq "host-statuses")
-    then (cts:search(doc()/m:host-statuses, lib-view:and-query($start-time, $hostname)))
-  (: TODO - bit of a hack and doesn't work... :)
-  else if ($MODULE eq "database-summary.xqy")
-    then (cts:search(doc()/m:database-statuses, lib-view:and-query($start-time, $hostname)))
-    (: else if ($root-node-name eq "")
-      then () :)
-      (: TODO - does this work? :)
+  (:else if ($root-node-name eq "host-statuses")
+    then (cts:search(doc()/m:host-statuses, lib-view:and-query($start-time, $hostname))) :)    
+  (: TODO - seems to work! :)
   else (cts:search(doc()/m:host-statuses, lib-view:and-query($start-time, $hostname)))
 };
 
@@ -62,7 +57,7 @@ declare function lib-view:output-td-if-available($node as node()?){
 };
 
 declare function lib-view:build-href($classname as xs:string, $module as xs:string, $uri as xs:string, $start-time as xs:string, $host as xs:string, $linktext as xs:string) as element(a) {
-  xdmp:log("build-href: "||$classname||" | "||$module||" | "||$uri),
+  xdmp:log("build-href: "||$classname||" | "||$module||" | "||$uri,"debug"),
   element a {attribute class {$classname}, attribute href{"/"||$module||"?uri="||$uri||"&amp;st="||$start-time||"&amp;host="||$host},$linktext}
 };
 
@@ -72,7 +67,7 @@ declare function lib-view:render-xml-doc($doc as document-node()){
 };
 
 declare function lib-view:is-active($item1 as xs:string, $item2 as xs:string) as xs:string {
-  xdmp:log("is-active: "||$item1||" | "||$item2),
+  xdmp:log("is-active: "||$item1||" | "||$item2,"debug"),
   if ($item1 eq $item2)
   then ("dropdown-item active")
   else ("dropdown-item")
@@ -145,7 +140,7 @@ declare function lib-view:top-page-summary($uri, $doc) {
 };
 
 declare function lib-view:contextual-menu(){
-  xdmp:log("contextual"),
+  xdmp:log("contextual","debug"),
   if ($MODULE eq "database-summary.xqy")
   then (
     <li class="nav-item dropdown">
