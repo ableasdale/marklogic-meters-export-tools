@@ -71,23 +71,15 @@ xdmp.toJSON(
 			{
 				"mode": "lines", 
 				"y": listCacheMisses, 
-				"x": dateTimes, 
-				"type": "scatter", 
-				"name": "list-cache-misses"
+				"x": dateTimes,
+				"name": "List Cache Misses"
 			}
 		], 
 		"layout": {
-			"autosize": true, 
 			"width" : width,
 			"title": "List Cache Misses for "+database, 
-			
-			"yaxis": {
-				"title": "Y AXIS TITLE"
-			}, 
-			
-			"xaxis": {
-				"title": "X AXIS TITLE" 
-			}
+			"yaxis": {"title": "LC Misses"}, 
+			"xaxis": {"title": "Date / Time"}
 		}	
 	},
 	"1" : {
@@ -96,25 +88,14 @@ xdmp.toJSON(
 				"mode": "lines", 
 				"y": compressedTreeCacheMisses, 
 				"x": dateTimes, 
-				"line": { 
-					"shape": "spline"
-				}, 
-				"type": "scatter", 
-				"name": "compressed-tree-cache-misses"
+				"name": "Compressed Tree Cache Misses"
 			}
 		], 
 		"layout": {
-			"autosize": true, 
 			"width" : width,
 			"title": "Compressed Tree Cache Misses for "+database, 
-			
-			"yaxis": {
-				"title": "Y AXIS TITLE"
-			}, 
-			
-			"xaxis": {
-				"title": "X AXIS TITLE" 
-			}
+			"yaxis": {"title": "CTC Misses"}, 
+			"xaxis": {"title": "Date / Time"}
 		}
 	},
 	"2" : {
@@ -123,35 +104,20 @@ xdmp.toJSON(
 				"mode": "lines", 
 				"y": activeFragmentCounts, 
 				"x": dateTimes, 
-				"line": { 
-					"shape": "spline"
-				}, 
-				"type": "scatter", 
-				"name": "Active Fragment Count (master)"
+				"name": "AFC (master)"
 			},
 			{
 				"mode": "lines", 
 				"y": activeFragmentCountsReplica, 
 				"x": dateTimes, 
-				"line": { 
-					"shape": "spline"
-				}, 
-				"type": "scatter", 
-				"name": "Active Fragment Count (replica)"
+				"name": "AFC (replica)"
 			}
 		], 
 		"layout": {
-			"autosize": true, 
 			"width" : width,
 			"title": "Active Fragment Counts (Master/Replica) for "+database, 
-			
-			"yaxis": {
-				"title": "Y AXIS TITLE"
-			}, 
-			
-			"xaxis": {
-				"title": "X AXIS TITLE" 
-			}
+			"yaxis": {"title": "AFC (Master/Replica)"}, 
+			"xaxis": {"title": "Date / Time"}
 		}
 	},
 	"3" : {
@@ -160,25 +126,14 @@ xdmp.toJSON(
 				"mode": "lines", 
 				"y": writeLockCounts, 
 				"x": dateTimes, 
-				"line": { 
-					"shape": "spline"
-				}, 
-				"type": "scatter", 
-				"name": "write-lock-count"
+				"name": "Write Lock Count"
 			}
 		], 
 		"layout": {
-			"autosize": true, 
 			"width" : width,
 			"title": "Write Lock Counts for "+database, 
-			
-			"yaxis": {
-				"title": "Y AXIS TITLE"
-			}, 
-			
-			"xaxis": {
-				"title": "X AXIS TITLE" 
-			}
+			"yaxis": {"title": "Write Lock Counts"}, 
+			"xaxis": {"title": "Date / Time"}
 		}
 	},
 	"4" : {
@@ -187,29 +142,20 @@ xdmp.toJSON(
 				"mode": "lines", 
 				"y": deletedFragmentCounts, 
 				"x": dateTimes, 
-				"type": "scatter", 
-				"name": "Deleted Fragment Count (master)"
+				"name": "DFC (master)"
 			},
 			{
 				"mode": "lines", 
 				"y": deletedFragmentCountsReplica, 
-				"x": dateTimes, 
-				"type": "scatter", 
-				"name": "Deleted Fragment Count (replica)"
+				"x": dateTimes,
+				"name": "DFC (replica)"
 			}
 		], 
 		"layout": {
-			"autosize": true, 
 			"width" : width,
 			"title": "Deleted Fragment Counts (Master/Replica) for "+database, 
-			
-			"yaxis": {
-				"title": "Y AXIS TITLE"
-			}, 
-			
-			"xaxis": {
-				"title": "X AXIS TITLE" 
-			}
+			"yaxis": {"title": "DFC (Master/Replica)"}, 
+			"xaxis": {"title": "Date / Time"}
 		}
 	},
 	"5" : {
@@ -218,25 +164,14 @@ xdmp.toJSON(
 				"mode": "lines", 
 				"y": queryReadBytesCounts, 
 				"x": dateTimes, 
-				"line": { 
-					"shape": "spline"
-				}, 
-				"type": "scatter", 
-				"name": "query-read-bytes-count"
+				"name": "Query Read Bytes"
 			}
 		], 
 		"layout": {
-			"autosize": true, 
 			"width" : width,
 			"title": "Query Read Bytes Counts for "+database, 
-			
-			"yaxis": {
-				"title": "Y AXIS TITLE"
-			}, 
-			
-			"xaxis": {
-				"title": "X AXIS TITLE" 
-			}
+			"yaxis": {"title": "Query Read Bytes"}, 
+			"xaxis": {"title": "Date / Time"}
 		}
 	},
 	"6" : {
@@ -245,35 +180,20 @@ xdmp.toJSON(
 				"mode": "lines", 
 				"y": mergeReadTimeCounts, 
 				"x": dateTimes, 
-				"line": { 
-					"shape": "spline"
-				}, 
-				"type": "scatter", 
-				"name": "merge read time"
+				"name": "Merge Read Time"
 			},
 			{
 				"mode": "lines", 
 				"y": mergeWriteTimeCounts, 
 				"x": dateTimes, 
-				"line": { 
-					"shape": "spline"
-				}, 
-				"type": "scatter", 
-				"name": "merge write time"
+				"name": "Merge Write Time"
 			}
 		], 
 		"layout": {
-			"autosize": true, 
 			"width" : width,
-			"title": "merge read/write times on the master forests for "+database, 
-			
-			"yaxis": {
-				"title": "Y AXIS TITLE"
-			}, 
-			
-			"xaxis": {
-				"title": "X AXIS TITLE" 
-			}
+			"title": "Merge Read/Write times on the Master forests for "+database, 
+			"yaxis": {"title": "Merge (R/W) Time"}, 
+			"xaxis": {"title": "Date / Time"}
 		}
 	},
 });
@@ -361,7 +281,7 @@ xdmp.toJSON(
 			"height": 450, 
 			"width": 1000, 
 			"xaxis": {
-				"title": "X AXIS TITLE" 
+				"title": "Date / Time" 
 			}
 		}
 	}
@@ -469,7 +389,7 @@ xdmp.toJSON(
 			], 
 			"xaxis": {
 				"tickformat": "", 
-				"title": "X AXIS TITLE", 
+				"title": "Date / Time", 
 				"showgrid": false, 
 				"range": [
 					1193687871762.1562, 

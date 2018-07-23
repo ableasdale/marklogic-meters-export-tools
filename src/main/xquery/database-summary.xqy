@@ -25,8 +25,8 @@ declare function local:process-start-times($start-times) {
         (: let $_ := xdmp:log($j) :)
         return
             element tr {
-                element td {element a {attribute href {"/databases.xqy?uri="||fn:base-uri($j)},$start-time}},
-                lib-view:output-td-if-available($j/m:master-aggregate/m:nonblocking-timestamp),
+                element td {element a {attribute href {"/databases.xqy?uri="||fn:base-uri($j)},fn:substring-after($start-time cast as xs:string,"T")}},
+                element td {element abbr {attribute title{fn:string($j/m:master-aggregate/m:nonblocking-timestamp)}, fn:substring-after(fn:substring-before(fn:string($j/m:master-aggregate/m:nonblocking-timestamp), "."), "T")}},
                 lib-view:output-td-if-available($j/m:master-aggregate/m:active-fragment-count),
                 lib-view:output-td-if-available($j/m:master-aggregate/m:deleted-fragment-count),               
                 element td {fn:string($j/m:master-aggregate/m:list-cache-hits) || " / " || fn:string($j/m:master-aggregate/m:list-cache-hit-rate)},
