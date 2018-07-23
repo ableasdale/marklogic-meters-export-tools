@@ -1,5 +1,6 @@
 
-const hostname = xdmp.getRequestField("host")
+const hostname = xdmp.getRequestField("host");
+const width = xdmp.getRequestField("width");
 
 let dateTimes = cts.elementValues(fn.QName("http://marklogic.com/manage/meters","start-time"), null, ['ascending']);
 var iowaitTimes = new Array();
@@ -54,8 +55,7 @@ xdmp.toJSON(
 	], 
 	"layout": {
 		"autosize": true, 
-		// TODO - WIDTH HARD CODED!
-		"width" : "1400",
+		"width" : width,
 		"title": "CPU % iowait times / Write Lock Rate", 
 		
 		"yaxis": {

@@ -48,19 +48,18 @@ declare function local:table($start-times) {
     }
 };
 
+declare function local:create-chart-containers($rootname, $num) {
+    for $i in 0 to $num
+    return element div {attribute class {"row"}, attribute id {$rootname||$i}, " "}
+};
+
 
 lib-bootstrap:create-starter-template("Database Summary: "||$lib-view:HOST,
     lib-bootstrap:bootstrap-container(
         (   
             lib-view:nav(),
             element h3 {$lib-view:HOST || " | " || $lib-view:DATABASE},
-            <div class="row" style="border: 5px solid black" id="root0">{" "}</div>,
-            <div class="row" style="border: 5px solid black" id="root1">{" "}</div>,
-            <div class="row" style="border: 5px solid black" id="root2">{" "}</div>,
-            <div class="row" style="border: 5px solid black" id="root3">{" "}</div>,
-            <div class="row" style="border: 5px solid black" id="root4">{" "}</div>,
-            <div class="row" style="border: 5px solid black" id="root5">{" "}</div>,
-            <div class="row" style="border: 5px solid black" id="root6">{" "}</div>,
+            local:create-chart-containers("root",6),
             local:table(cts:element-values(xs:QName("m:start-time")))           
         )
     ), <script src="/multicharts.js">{"  "}</script>

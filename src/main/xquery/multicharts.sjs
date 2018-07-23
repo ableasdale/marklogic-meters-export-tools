@@ -1,6 +1,7 @@
 
-const hostname = xdmp.getRequestField("host")
-const database = xdmp.getRequestField("db")
+const hostname = xdmp.getRequestField("host");
+const database = xdmp.getRequestField("db");
+const width = xdmp.getRequestField("width");
 
 let dateTimes = cts.elementValues(fn.QName("http://marklogic.com/manage/meters","start-time"), null, ['ascending']);
 var listCacheMisses = new Array();
@@ -77,8 +78,7 @@ xdmp.toJSON(
 		], 
 		"layout": {
 			"autosize": true, 
-			// TODO - WIDTH HARD CODED!
-			"width" : "1400",
+			"width" : width,
 			"title": "List Cache Misses for "+database, 
 			
 			"yaxis": {
@@ -105,8 +105,7 @@ xdmp.toJSON(
 		], 
 		"layout": {
 			"autosize": true, 
-			// TODO - WIDTH HARD CODED!
-			"width" : "1400",
+			"width" : width,
 			"title": "Compressed Tree Cache Misses for "+database, 
 			
 			"yaxis": {
@@ -143,8 +142,7 @@ xdmp.toJSON(
 		], 
 		"layout": {
 			"autosize": true, 
-			// TODO - WIDTH HARD CODED!
-			"width" : "1400",
+			"width" : width,
 			"title": "Active Fragment Counts (Master/Replica) for "+database, 
 			
 			"yaxis": {
@@ -171,8 +169,7 @@ xdmp.toJSON(
 		], 
 		"layout": {
 			"autosize": true, 
-			// TODO - WIDTH HARD CODED!
-			"width" : "1400",
+			"width" : width,
 			"title": "Write Lock Counts for "+database, 
 			
 			"yaxis": {
@@ -203,8 +200,7 @@ xdmp.toJSON(
 		], 
 		"layout": {
 			"autosize": true, 
-			// TODO - WIDTH HARD CODED!
-			"width" : "1400",
+			"width" : width,
 			"title": "Deleted Fragment Counts (Master/Replica) for "+database, 
 			
 			"yaxis": {
@@ -231,8 +227,7 @@ xdmp.toJSON(
 		], 
 		"layout": {
 			"autosize": true, 
-			// TODO - WIDTH HARD CODED!
-			"width" : "1400",
+			"width" : width,
 			"title": "Query Read Bytes Counts for "+database, 
 			
 			"yaxis": {
@@ -269,8 +264,7 @@ xdmp.toJSON(
 		], 
 		"layout": {
 			"autosize": true, 
-			// TODO - WIDTH HARD CODED!
-			"width" : "1400",
+			"width" : width,
 			"title": "merge read/write times on the master forests for "+database, 
 			
 			"yaxis": {

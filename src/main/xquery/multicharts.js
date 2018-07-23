@@ -3,7 +3,10 @@ var request = window.location.href;
 params = request.substring(request.indexOf("?"));
 
 async function chart() {
-    const data = await d3.json("/multicharts.sjs"+params);
+    var element = d3.select("div.container-fluid").node();
+    var chartWidth = element.getBoundingClientRect().width;
+
+    const data = await d3.json("/multicharts.sjs"+params+"&width="+chartWidth);
 
     // console.log(Object.keys(data).length);
     for(var i = 0; i < Object.keys(data).length; i++) {
