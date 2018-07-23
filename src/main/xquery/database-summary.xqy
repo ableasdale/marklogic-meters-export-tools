@@ -58,6 +58,9 @@ lib-bootstrap:create-starter-template("Database Summary: "||$lib-view:HOST,
             <div class="row" style="border: 5px solid black" id="root1">{" "}</div>,
             <div class="row" style="border: 5px solid black" id="root2">{" "}</div>,
             <div class="row" style="border: 5px solid black" id="root3">{" "}</div>,
+            <div class="row" style="border: 5px solid black" id="root4">{" "}</div>,
+            <div class="row" style="border: 5px solid black" id="root5">{" "}</div>,
+            <div class="row" style="border: 5px solid black" id="root6">{" "}</div>,
             local:table(cts:element-values(xs:QName("m:start-time")))           
         )
     ), <script src="/multicharts.js">{"  "}</script>

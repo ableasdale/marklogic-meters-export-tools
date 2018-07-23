@@ -6,7 +6,13 @@ let dateTimes = cts.elementValues(fn.QName("http://marklogic.com/manage/meters",
 var listCacheMisses = new Array();
 var compressedTreeCacheMisses = new Array();
 var activeFragmentCounts = new Array();
+var activeFragmentCountsReplica = new Array();
 var writeLockCounts = new Array();
+var deletedFragmentCounts = new Array();
+var deletedFragmentCountsReplica = new Array();
+var queryReadBytesCounts = new Array();
+var mergeReadTimeCounts = new Array();
+var mergeWriteTimeCounts = new Array();
 
 function pushValuesFor(dateTime) {
 	xdmp.log("top of push vals for: "+dateTime+" | "+hostname+" | "+database, "debug");
@@ -30,8 +36,26 @@ function pushValuesFor(dateTime) {
 		var activeFragmentRecord = x.xpath('//*:database-status[*:database-name eq "'+database+'"]/*:master-aggregate/*:active-fragment-count');
 		activeFragmentCounts.push(fn.data(activeFragmentRecord));
 
+		var activeFragmentRecordReplica = x.xpath('//*:database-status[*:database-name eq "'+database+'"]/*:replica-aggregate/*:active-fragment-count');
+		activeFragmentCountsReplica.push(fn.data(activeFragmentRecordReplica));
+
 		var writeLockRecord = x.xpath('//*:database-status[*:database-name eq "'+database+'"]/*:master-aggregate/*:write-lock-count');
 		writeLockCounts.push(fn.data(writeLockRecord));
+
+		var deletedFragmentRecord = x.xpath('//*:database-status[*:database-name eq "'+database+'"]/*:master-aggregate/*:deleted-fragment-count');
+		deletedFragmentCounts.push(fn.data(deletedFragmentRecord));
+
+		var deletedFragmentRecordReplica = x.xpath('//*:database-status[*:database-name eq "'+database+'"]/*:replica-aggregate/*:deleted-fragment-count');
+		deletedFragmentCountsReplica.push(fn.data(deletedFragmentRecordReplica));
+
+		var queryReadBytesRecord = x.xpath('//*:database-status[*:database-name eq "'+database+'"]/*:master-aggregate/*:query-read-bytes');
+		queryReadBytesCounts.push(fn.data(queryReadBytesRecord));
+
+		var mergeReadTimeRecord = x.xpath('//*:database-status[*:database-name eq "'+database+'"]/*:master-aggregate/*:merge-read-time');
+		mergeReadTimeCounts.push(fn.data(mergeReadTimeRecord));
+
+		var mergeWriteTimeRecord = x.xpath('//*:database-status[*:database-name eq "'+database+'"]/*:master-aggregate/*:merge-write-time');
+		mergeWriteTimeCounts.push(fn.data(mergeWriteTimeRecord));
 	}
 }
 
@@ -47,9 +71,6 @@ xdmp.toJSON(
 				"mode": "lines", 
 				"y": listCacheMisses, 
 				"x": dateTimes, 
-				"line": { 
-					"shape": "spline"
-				}, 
 				"type": "scatter", 
 				"name": "list-cache-misses"
 			}
@@ -107,14 +128,24 @@ xdmp.toJSON(
 					"shape": "spline"
 				}, 
 				"type": "scatter", 
-				"name": "active-fragment-count"
+				"name": "Active Fragment Count (master)"
+			},
+			{
+				"mode": "lines", 
+				"y": activeFragmentCountsReplica, 
+				"x": dateTimes, 
+				"line": { 
+					"shape": "spline"
+				}, 
+				"type": "scatter", 
+				"name": "Active Fragment Count (replica)"
 			}
 		], 
 		"layout": {
 			"autosize": true, 
 			// TODO - WIDTH HARD CODED!
 			"width" : "1400",
-			"title": "Active Fragment Counts for "+database, 
+			"title": "Active Fragment Counts (Master/Replica) for "+database, 
 			
 			"yaxis": {
 				"title": "Y AXIS TITLE"
@@ -143,6 +174,104 @@ xdmp.toJSON(
 			// TODO - WIDTH HARD CODED!
 			"width" : "1400",
 			"title": "Write Lock Counts for "+database, 
+			
+			"yaxis": {
+				"title": "Y AXIS TITLE"
+			}, 
+			
+			"xaxis": {
+				"title": "X AXIS TITLE" 
+			}
+		}
+	},
+	"4" : {
+		"data": [
+			{
+				"mode": "lines", 
+				"y": deletedFragmentCounts, 
+				"x": dateTimes, 
+				"type": "scatter", 
+				"name": "Deleted Fragment Count (master)"
+			},
+			{
+				"mode": "lines", 
+				"y": deletedFragmentCountsReplica, 
+				"x": dateTimes, 
+				"type": "scatter", 
+				"name": "Deleted Fragment Count (replica)"
+			}
+		], 
+		"layout": {
+			"autosize": true, 
+			// TODO - WIDTH HARD CODED!
+			"width" : "1400",
+			"title": "Deleted Fragment Counts (Master/Replica) for "+database, 
+			
+			"yaxis": {
+				"title": "Y AXIS TITLE"
+			}, 
+			
+			"xaxis": {
+				"title": "X AXIS TITLE" 
+			}
+		}
+	},
+	"5" : {
+		"data": [
+			{
+				"mode": "lines", 
+				"y": queryReadBytesCounts, 
+				"x": dateTimes, 
+				"line": { 
+					"shape": "spline"
+				}, 
+				"type": "scatter", 
+				"name": "query-read-bytes-count"
+			}
+		], 
+		"layout": {
+			"autosize": true, 
+			// TODO - WIDTH HARD CODED!
+			"width" : "1400",
+			"title": "Query Read Bytes Counts for "+database, 
+			
+			"yaxis": {
+				"title": "Y AXIS TITLE"
+			}, 
+			
+			"xaxis": {
+				"title": "X AXIS TITLE" 
+			}
+		}
+	},
+	"6" : {
+		"data": [
+			{
+				"mode": "lines", 
+				"y": mergeReadTimeCounts, 
+				"x": dateTimes, 
+				"line": { 
+					"shape": "spline"
+				}, 
+				"type": "scatter", 
+				"name": "merge read time"
+			},
+			{
+				"mode": "lines", 
+				"y": mergeWriteTimeCounts, 
+				"x": dateTimes, 
+				"line": { 
+					"shape": "spline"
+				}, 
+				"type": "scatter", 
+				"name": "merge write time"
+			}
+		], 
+		"layout": {
+			"autosize": true, 
+			// TODO - WIDTH HARD CODED!
+			"width" : "1400",
+			"title": "merge read/write times on the master forests for "+database, 
 			
 			"yaxis": {
 				"title": "Y AXIS TITLE"
