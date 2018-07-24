@@ -59,7 +59,7 @@ xdmp.toJSON(
 		], 
 		"layout": {
 			"width" : width,
-			"title": "CPU % iowait times", 
+			"title": "CPU % iowait times for host "+hostname, 
 			"yaxis": {"title": "% iowait"}, 
 			"xaxis": {"title": "Date / Time"}
 		}
@@ -75,7 +75,7 @@ xdmp.toJSON(
 		], 
 		"layout": {
 			"width" : width,
-			"title": "Write Lock Rates", 
+			"title": "Write Lock Rates for host "+hostname, 
 			"yaxis": {"title": "WLR"}, 
 			"xaxis": {"title": "Date / Time"}
 		}
@@ -91,7 +91,7 @@ xdmp.toJSON(
 		], 
 		"layout": {
 			"width" : width,
-			"title": "Anonymous Memory Utilisation", 
+			"title": "Anonymous Memory Utilisation for host "+hostname,
 			"yaxis": {"title": "anon"}, 
 			"xaxis": {"title": "Date / Time"}
 		}
@@ -107,7 +107,7 @@ xdmp.toJSON(
 		], 
 		"layout": {
 			"width" : width,
-			"title": "Memory Process Size", 
+			"title": "Memory Process Size for host "+hostname, 
 			"yaxis": {"title": "mps"}, 
 			"xaxis": {"title": "Date / Time"}
 		}
@@ -123,7 +123,7 @@ xdmp.toJSON(
 		], 
 		"layout": {
 			"width" : width,
-			"title": "Memory Resident Set Size (RSS)", 
+			"title": "Memory Resident Set Size (RSS) for host "+hostname, 
 			"yaxis": {"title": "rss"}, 
 			"xaxis": {"title": "Date / Time"}
 		}
@@ -139,7 +139,7 @@ xdmp.toJSON(
 		], 
 		"layout": {
 			"width" : width,
-			"title": "Memory Process Swap Size", 
+			"title": "Memory Process Swap Size for host "+hostname, 
 			"yaxis": {"title": "swap"}, 
 			"xaxis": {"title": "Date / Time"}
 		}
@@ -161,7 +161,7 @@ xdmp.toJSON(
 		], 
 		"layout": {
 			"width" : width,
-			"title": "XDQP Client and Server Send Rates", 
+			"title": "XDQP Client and Server Send Rates for host "+hostname, 
 			"yaxis": {"title": "xdqp rates"}, 
 			"xaxis": {"title": "Date / Time"}
 		}

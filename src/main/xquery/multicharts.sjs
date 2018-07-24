@@ -77,7 +77,7 @@ xdmp.toJSON(
 		], 
 		"layout": {
 			"width" : width,
-			"title": "List Cache Misses for "+database, 
+			"title": "List Cache Misses for "+database + " on "+hostname, 
 			"yaxis": {"title": "LC Misses"}, 
 			"xaxis": {"title": "Date / Time"}
 		}	
@@ -93,7 +93,7 @@ xdmp.toJSON(
 		], 
 		"layout": {
 			"width" : width,
-			"title": "Compressed Tree Cache Misses for "+database, 
+			"title": "Compressed Tree Cache Misses for "+database + " on "+hostname, 
 			"yaxis": {"title": "CTC Misses"}, 
 			"xaxis": {"title": "Date / Time"}
 		}
@@ -115,7 +115,7 @@ xdmp.toJSON(
 		], 
 		"layout": {
 			"width" : width,
-			"title": "Active Fragment Counts (Master/Replica) for "+database, 
+			"title": "Active Fragment Counts (Master/Replica) for "+database + " on "+hostname, 
 			"yaxis": {"title": "AFC (Master/Replica)"}, 
 			"xaxis": {"title": "Date / Time"}
 		}
@@ -153,7 +153,7 @@ xdmp.toJSON(
 		], 
 		"layout": {
 			"width" : width,
-			"title": "Deleted Fragment Counts (Master/Replica) for "+database, 
+			"title": "Deleted Fragment Counts (Master/Replica) for "+database + " on "+hostname, 
 			"yaxis": {"title": "DFC (Master/Replica)"}, 
 			"xaxis": {"title": "Date / Time"}
 		}
@@ -169,7 +169,7 @@ xdmp.toJSON(
 		], 
 		"layout": {
 			"width" : width,
-			"title": "Query Read Bytes Counts for "+database, 
+			"title": "Query Read Bytes Counts for "+database + " on "+hostname, 
 			"yaxis": {"title": "Query Read Bytes"}, 
 			"xaxis": {"title": "Date / Time"}
 		}
@@ -191,7 +191,7 @@ xdmp.toJSON(
 		], 
 		"layout": {
 			"width" : width,
-			"title": "Merge Read/Write times on the Master forests for "+database, 
+			"title": "Merge Read/Write times on the Master forests for "+database + " on "+hostname, 
 			"yaxis": {"title": "Merge (R/W) Time"}, 
 			"xaxis": {"title": "Date / Time"}
 		}
