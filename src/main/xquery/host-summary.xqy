@@ -61,7 +61,7 @@ lib-bootstrap:create-starter-template("Host Summary: "||$lib-view:HOST,
         (   
             lib-view:nav(),
             element h3 {$lib-view:HOST},
-            <div class="row" style="border: 5px solid black" id="root">{" "}</div>,
+            lib-view:create-chart-containers("root",4),
             local:table(cts:element-values(xs:QName("m:start-time")))
         )
     ), <script src="/chart.js">{"  "}</script>

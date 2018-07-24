@@ -48,18 +48,12 @@ declare function local:table($start-times) {
     }
 };
 
-declare function local:create-chart-containers($rootname, $num) {
-    for $i in 0 to $num
-    return element div {attribute class {"row"}, attribute id {$rootname||$i}, " "}
-};
-
-
 lib-bootstrap:create-starter-template("Database Summary: "||$lib-view:HOST,
     lib-bootstrap:bootstrap-container(
         (   
             lib-view:nav(),
             element h3 {$lib-view:HOST || " | " || $lib-view:DATABASE},
-            local:create-chart-containers("root",6),
+            lib-view:create-chart-containers("root",6),
             local:table(cts:element-values(xs:QName("m:start-time")))           
         )
     ), <script src="/multicharts.js">{"  "}</script>

@@ -7,12 +7,13 @@ async function chart() {
     var chartWidth = element.getBoundingClientRect().width;
 
     const data = await d3.json("/chart.sjs"+params+"&width="+chartWidth);
-    console.dir(data.layout);
+    //console.dir(data.layout);
 
+    for(var i = 0; i < Object.keys(data).length; i++) {
     ReactDOM.render(
-        React.createElement(Plot, data),
-        document.getElementById('root')
+        React.createElement(Plot, data[i]),
+        document.getElementById('root'+i)
       );
+    }
 }
-
 chart();

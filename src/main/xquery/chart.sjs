@@ -1,10 +1,12 @@
-
 const hostname = xdmp.getRequestField("host");
 const width = xdmp.getRequestField("width");
 
 let dateTimes = cts.elementValues(fn.QName("http://marklogic.com/manage/meters","start-time"), null, ['ascending']);
 var iowaitTimes = new Array();
 var writeLockRates = new Array();
+var anonMemUsage = new Array();
+var memProcessSize = new Array();
+var memRssSize = new Array();
 
 function pushValuesFor(dateTime) {
 	for (const x of cts.search(
@@ -21,6 +23,12 @@ function pushValuesFor(dateTime) {
 		iowaitTimes.push(fn.data(iowait));
 		var writeLockRate = x.xpath('//*:write-lock-rate');
 		writeLockRates.push(fn.data(writeLockRate));
+		var anonMem = x.xpath('//*:memory-process-anon');
+		anonMemUsage.push(fn.data(anonMem));
+		var memProcess = x.xpath('//*:memory-process-size');
+		memProcessSize.push(fn.data(memProcess));
+		var memRss = x.xpath('//*:memory-process-rss');
+		memRssSize.push(fn.data(memRss));
 	}
 }
 
@@ -31,41 +39,86 @@ for (let dateTime of dateTimes) {
 xdmp.setResponseContentType("application/json"),
 xdmp.toJSON(
 {
-	"data": [
-		{
-			"mode": "lines", 
-			"y": iowaitTimes, 
-			"x": dateTimes, 
-			"line": { 
-				"shape": "spline"
-			}, 
-			"type": "scatter", 
-			"name": "iowait"
-		},
-		{
-			"mode": "lines", 
-			"y": writeLockRates, 
-			"x": dateTimes, 
-			"line": { 
-				"shape": "spline"
-			}, 
-			"type": "scatter", 
-			"name": "write lock rate"
+	"0" : {
+		"data": [
+			{
+				"mode": "lines", 
+				"y": iowaitTimes, 
+				"x": dateTimes, 
+				"name": "iowait"
+			}
+		], 
+		"layout": {
+			"width" : width,
+			"title": "CPU % iowait times", 
+			"yaxis": {"title": "% iowait"}, 
+			"xaxis": {"title": "Date / Time"}
 		}
-	], 
-	"layout": {
-		"autosize": true, 
-		"width" : width,
-		"title": "CPU % iowait times / Write Lock Rate", 
-		
-		"yaxis": {
-			"title": "Y AXIS TITLE"
-		}, 
-		
-		"xaxis": {
-			"title": "X AXIS TITLE" 
+	},
+	"1" : {
+		"data": [
+			{
+				"mode": "lines", 
+				"y": writeLockRates, 
+				"x": dateTimes, 
+				"name": "write lock rate"
+			}
+		], 
+		"layout": {
+			"width" : width,
+			"title": "Write Lock Rates", 
+			"yaxis": {"title": "WLR"}, 
+			"xaxis": {"title": "Date / Time"}
 		}
-	}
+	},
+	"2" : {
+		"data": [
+			{
+				"mode": "lines", 
+				"y": anonMemUsage, 
+				"x": dateTimes, 
+				"name": "anon mem"
+			}
+		], 
+		"layout": {
+			"width" : width,
+			"title": "Anonymous Memory Utilisation", 
+			"yaxis": {"title": "anon"}, 
+			"xaxis": {"title": "Date / Time"}
+		}
+	},
+	"3" : {
+		"data": [
+			{
+				"mode": "lines", 
+				"y": memProcessSize, 
+				"x": dateTimes, 
+				"name": "mem process size"
+			}
+		], 
+		"layout": {
+			"width" : width,
+			"title": "Memory Process Size", 
+			"yaxis": {"title": "mps"}, 
+			"xaxis": {"title": "Date / Time"}
+		}
+	},
+	"4" : {
+		"data": [
+			{
+				"mode": "lines", 
+				"y": memRssSize, 
+				"x": dateTimes, 
+				"name": "mem RSS size"
+			}
+		], 
+		"layout": {
+			"width" : width,
+			"title": "Memory Resident Set Size (RSS)", 
+			"yaxis": {"title": "rss"}, 
+			"xaxis": {"title": "Date / Time"}
+		}
+	},
 });
 
 

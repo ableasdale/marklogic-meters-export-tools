@@ -61,6 +61,11 @@ declare function lib-view:build-href($classname as xs:string, $module as xs:stri
   element a {attribute class {$classname}, attribute href{"/"||$module||"?uri="||$uri||"&amp;st="||$start-time||"&amp;host="||$host||"&amp;db="||$db}, $linktext}
 };
 
+declare function lib-view:create-chart-containers($rootname, $num) {
+    for $i in 0 to $num
+    return element div {attribute class {"row"}, attribute id {$rootname||$i}, " "}
+};
+
 declare function lib-view:render-xml-doc($doc as document-node()){
   element h5 {"XML Content:"},
   element textarea {attribute id {"xml"}, attribute class {"form-control"}, attribute rows {"25"}, $doc}
