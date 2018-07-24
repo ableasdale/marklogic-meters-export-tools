@@ -7,6 +7,9 @@ var writeLockRates = new Array();
 var anonMemUsage = new Array();
 var memProcessSize = new Array();
 var memRssSize = new Array();
+var memProcessSwapSize = new Array();
+var xdqpClientSendRates = new Array();
+var xdqpServerSendRates = new Array();
 
 function pushValuesFor(dateTime) {
 	for (const x of cts.search(
@@ -29,6 +32,12 @@ function pushValuesFor(dateTime) {
 		memProcessSize.push(fn.data(memProcess));
 		var memRss = x.xpath('//*:memory-process-rss');
 		memRssSize.push(fn.data(memRss));
+		var memSwap = x.xpath('//*:memory-process-swap-size');
+		memProcessSwapSize.push(fn.data(memSwap));
+		var clientSend = x.xpath('//*:xdqp-client-send-rate');
+		xdqpClientSendRates.push(fn.data(clientSend));
+		var serverSend = x.xpath('//*:xdqp-server-send-rate');
+		xdqpServerSendRates.push(fn.data(serverSend));
 	}
 }
 
@@ -119,6 +128,44 @@ xdmp.toJSON(
 			"xaxis": {"title": "Date / Time"}
 		}
 	},
+	"5" : {
+		"data": [
+			{
+				"mode": "lines", 
+				"y": memProcessSwapSize, 
+				"x": dateTimes, 
+				"name": "mem swap size"
+			}
+		], 
+		"layout": {
+			"width" : width,
+			"title": "Memory Process Swap Size", 
+			"yaxis": {"title": "swap"}, 
+			"xaxis": {"title": "Date / Time"}
+		}
+	},
+	"6" : {
+		"data": [
+			{
+				"mode": "lines", 
+				"y": xdqpClientSendRates, 
+				"x": dateTimes, 
+				"name": "XDQP C Send"
+			},
+			{
+				"mode": "lines", 
+				"y": xdqpServerSendRates, 
+				"x": dateTimes, 
+				"name": "XDQP S Send"
+			}
+		], 
+		"layout": {
+			"width" : width,
+			"title": "XDQP Client and Server Send Rates", 
+			"yaxis": {"title": "xdqp rates"}, 
+			"xaxis": {"title": "Date / Time"}
+		}
+	}
 });
 
 
