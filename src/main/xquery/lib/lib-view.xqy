@@ -122,10 +122,14 @@ declare function lib-view:nav() {
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarSummaryDropdown">
           {
+            <h6 class="dropdown-header">Database Level Items</h6>,
             lib-view:build-href(lib-view:is-active("database-summary.xqy", $MODULE), "database-summary.xqy", lib-view:exec-query-get-uri("database-statuses", $START-TIME, $HOST), $START-TIME, $HOST, $DATABASE, "By Database"),
             (: lib-view:build-href(lib-view:is-active("forest.xqy", $MODULE), "forest.xqy", lib-view:exec-query-get-uri("forest-statuses", $START-TIME, $HOST), $START-TIME, $HOST, "Forests"),
             lib-view:build-href(lib-view:is-active("server.xqy", $MODULE), "server.xqy", lib-view:exec-query-get-uri("server-statuses", $START-TIME, $HOST), $START-TIME, $HOST, "Servers"), :)
-            lib-view:build-href(lib-view:is-active("host-summary.xqy", $MODULE), "host-summary.xqy", lib-view:exec-query-get-uri("host-statuses", $START-TIME, $HOST), $START-TIME, $HOST, $DATABASE, "By Host")
+            <div class="dropdown-divider">{" "}</div>,
+            <h6 class="dropdown-header">Host Level Items</h6>,
+            lib-view:build-href(lib-view:is-active("host-summary.xqy", $MODULE), "host-summary.xqy", lib-view:exec-query-get-uri("host-statuses", $START-TIME, $HOST), $START-TIME, $HOST, $DATABASE, "By Host"),
+            lib-view:build-href(lib-view:is-active("xdqp-summary.xqy", $MODULE), "xdqp-summary.xqy", lib-view:exec-query-get-uri("host-statuses", $START-TIME, $HOST), $START-TIME, $HOST, $DATABASE, "XDQP Client / Server Send / Receive Metrics")
           }
         </div>
       </li>

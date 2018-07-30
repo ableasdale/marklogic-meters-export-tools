@@ -1,17 +1,12 @@
-const hostname = xdmp.getRequestField("host");
+//const hostname = xdmp.getRequestField("host");
 const width = xdmp.getRequestField("width");
 
+let hosts = cts.elementValues(fn.QName("http://marklogic.com/manage/meters", "host-name"), null, ['ascending']);
 let dateTimes = cts.elementValues(fn.QName("http://marklogic.com/manage/meters","start-time"), null, ['ascending']);
-var iowaitTimes = new Array();
-var writeLockRates = new Array();
-var anonMemUsage = new Array();
-var memProcessSize = new Array();
-var memRssSize = new Array();
-var memProcessSwapSize = new Array();
-var xdqpClientSendRates = new Array();
-var xdqpServerSendRates = new Array();
 
-function pushValuesFor(dateTime) {
+var objects = new Array();
+
+function pushValuesFor(hostname, dateTime) {
 	for (const x of cts.search(
 			cts.andQuery([
 				cts.elementRangeQuery(fn.QName("http://marklogic.com/manage/meters","start-time"), "=", dateTime),
@@ -22,18 +17,6 @@ function pushValuesFor(dateTime) {
 		)
 	) 
 	{
-		var iowait = x.xpath('//*:total-cpu-stat-iowait');
-		iowaitTimes.push(fn.data(iowait));
-		var writeLockRate = x.xpath('//*:write-lock-rate');
-		writeLockRates.push(fn.data(writeLockRate));
-		var anonMem = x.xpath('//*:memory-process-anon');
-		anonMemUsage.push(fn.data(anonMem));
-		var memProcess = x.xpath('//*:memory-process-size');
-		memProcessSize.push(fn.data(memProcess));
-		var memRss = x.xpath('//*:memory-process-rss');
-		memRssSize.push(fn.data(memRss));
-		var memSwap = x.xpath('//*:memory-process-swap-size');
-		memProcessSwapSize.push(fn.data(memSwap));
 		var clientSend = x.xpath('//*:xdqp-client-send-rate');
 		xdqpClientSendRates.push(fn.data(clientSend));
 		var serverSend = x.xpath('//*:xdqp-server-send-rate');
@@ -41,112 +24,15 @@ function pushValuesFor(dateTime) {
 	}
 }
 
-for (let dateTime of dateTimes) {
-  pushValuesFor(dateTime);
-}
-
-xdmp.setResponseContentType("application/json"),
-xdmp.toJSON(
-{
-	"0" : {
-		"data": [
-			{
-				"mode": "lines", 
-				"y": iowaitTimes, 
-				"x": dateTimes, 
-				"name": "iowait"
-			}
-		], 
-		"layout": {
-			"width" : width,
-			"title": "CPU % iowait times for host "+hostname, 
-			"yaxis": {"title": "% iowait"}, 
-			"xaxis": {"title": "Date / Time"}
-		},
-		"config" : {staticPlot: true}//{displayModeBar: false, scrollZoom: true}
-	},
-	"1" : {
-		"data": [
-			{
-				"mode": "lines", 
-				"y": writeLockRates, 
-				"x": dateTimes, 
-				"name": "write lock rate"
-			}
-		], 
-		"layout": {
-			"width" : width,
-			"title": "Write Lock Rates for host "+hostname, 
-			"yaxis": {"title": "WLR"}, 
-			"xaxis": {"title": "Date / Time"}
-		},
-		"config" : {staticPlot: true}//{displayModeBar: false, scrollZoom: true}
-	},
-	"2" : {
-		"data": [
-			{
-				"mode": "lines", 
-				"y": anonMemUsage, 
-				"x": dateTimes, 
-				"name": "anon mem"
-			}
-		], 
-		"layout": {
-			"width" : width,
-			"title": "Anonymous Memory Utilisation for host "+hostname,
-			"yaxis": {"title": "anon"}, 
-			"xaxis": {"title": "Date / Time"}
-		}
-	},
-	"3" : {
-		"data": [
-			{
-				"mode": "lines", 
-				"y": memProcessSize, 
-				"x": dateTimes, 
-				"name": "mem process size"
-			}
-		], 
-		"layout": {
-			"width" : width,
-			"title": "Memory Process Size for host "+hostname, 
-			"yaxis": {"title": "mps"}, 
-			"xaxis": {"title": "Date / Time"}
-		}
-	},
-	"4" : {
-		"data": [
-			{
-				"mode": "lines", 
-				"y": memRssSize, 
-				"x": dateTimes, 
-				"name": "mem RSS size"
-			}
-		], 
-		"layout": {
-			"width" : width,
-			"title": "Memory Resident Set Size (RSS) for host "+hostname, 
-			"yaxis": {"title": "rss"}, 
-			"xaxis": {"title": "Date / Time"}
-		}
-	},
-	"5" : {
-		"data": [
-			{
-				"mode": "lines", 
-				"y": memProcessSwapSize, 
-				"x": dateTimes, 
-				"name": "mem swap size"
-			}
-		], 
-		"layout": {
-			"width" : width,
-			"title": "Memory Process Swap Size for host "+hostname, 
-			"yaxis": {"title": "swap"}, 
-			"xaxis": {"title": "Date / Time"}
-		}
-	},
-	"6" : {
+for (let host of hosts) {
+    var xdqpServerSendRates = new Array();
+    var xdqpClientSendRates = new Array();
+    
+    for (let dateTime of dateTimes) {
+        pushValuesFor(host, dateTime);
+    }
+    // clear the array and push to bigger array?
+    var obj = {
 		"data": [
 			{
 				"mode": "lines", 
@@ -163,13 +49,51 @@ xdmp.toJSON(
 		], 
 		"layout": {
 			"width" : width,
-			"title": "XDQP Client and Server Send Rates for host "+hostname, 
+			"title": "XDQP Client and Server Send Rates", 
+			"yaxis": {"title": "xdqp rates"}, 
+			"xaxis": {"title": "Date / Time"}
+        }
+    };
+    objects.push(obj)
+}
+
+xdmp.setResponseContentType("application/json");
+
+/*(:
+for (let host of hosts) {
+    //objects.push({"0":host})
+    xdmp.toJSON (objects);
+} :) */
+
+xdmp.toJSON (objects);
+
+/*
+xdmp.toJSON(
+{
+	"0" : {
+		"data": [
+			{
+				"mode": "lines", 
+				"y": xdqpClientSendRates, 
+				"x": dateTimes, 
+				"name": "XDQP C Send"
+			},
+			{
+				"mode": "lines", 
+				"y": xdqpServerSendRates, 
+				"x": dateTimes, 
+				"name": "XDQP S Send"
+			}
+		], 
+		"layout": {
+			"width" : width,
+			"title": "XDQP Client and Server Send Rates", 
 			"yaxis": {"title": "xdqp rates"}, 
 			"xaxis": {"title": "Date / Time"}
 		}
 	}
 });
-
+*/
 
 // --- IGNORE BELOW
 
