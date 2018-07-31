@@ -6,7 +6,7 @@ async function chart() {
     var element = d3.select("div.container-fluid").node();
     var chartWidth = element.getBoundingClientRect().width;
 
-    const data = await d3.json("/summary.sjs"+params+"&width="+chartWidth);
+    const data = await d3.json("/xdqp-summary.sjs"+params+"&width="+chartWidth);
     //console.dir(data.layout);
 
     for(var i = 0; i < Object.keys(data).length; i++) {

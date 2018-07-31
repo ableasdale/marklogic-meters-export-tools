@@ -10,7 +10,6 @@ declare namespace xdmp = "http://marklogic.com/xdmp";
 declare function local:process-times-for-host($i, $pos) {
     element h5 {$i},
     element div {attribute class {"row"}, attribute id {"root"||$pos}, " "}
-    
 };
 
 lib-bootstrap:create-starter-template("XDQP Client / Server Send/Receive Details",
@@ -18,12 +17,8 @@ lib-bootstrap:create-starter-template("XDQP Client / Server Send/Receive Details
         (   
             lib-view:nav(),
             element h3 {"XDQP Client / Server Send / Receive Details"},
-            (:lib-view:create-chart-containers("root",6) :)
             for $i at $pos in cts:element-values(xs:QName("m:host-name"))
             return local:process-times-for-host($i, ($pos - 1))
-
-            (: local:table(cts:element-values(xs:QName("m:start-time")):)
         )
-    ), <script src="/summary.js?item=xdqp">{"  "}</script>
+    ), <script src="/xdqp-summary.js">{"  "}</script>
 )
- 
