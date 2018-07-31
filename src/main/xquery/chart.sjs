@@ -8,6 +8,7 @@ var anonMemUsage = new Array();
 var memProcessSize = new Array();
 var memRssSize = new Array();
 var memProcessSwapSize = new Array();
+var memProcessSwapInRates = new Array();
 var xdqpClientSendRates = new Array();
 var xdqpServerSendRates = new Array();
 
@@ -34,6 +35,8 @@ function pushValuesFor(dateTime) {
 		memRssSize.push(fn.data(memRss));
 		var memSwap = x.xpath('//*:memory-process-swap-size');
 		memProcessSwapSize.push(fn.data(memSwap));
+		var memSwapIn = x.xpath('//*:memory-system-swapin-rate');
+		memProcessSwapInRates.push(fn.data(memSwapIn));
 		var clientSend = x.xpath('//*:xdqp-client-send-rate');
 		xdqpClientSendRates.push(fn.data(clientSend));
 		var serverSend = x.xpath('//*:xdqp-server-send-rate');
@@ -147,6 +150,22 @@ xdmp.toJSON(
 		}
 	},
 	"6" : {
+		"data": [
+			{
+				"mode": "lines", 
+				"y": memProcessSwapInRates, 
+				"x": dateTimes, 
+				"name": "mem swap-in rate"
+			}
+		], 
+		"layout": {
+			"width" : width,
+			"title": "Memory Process Swap-In Rate for host "+hostname, 
+			"yaxis": {"title": "swap-in"}, 
+			"xaxis": {"title": "Date / Time"}
+		}
+	},
+	"7" : {
 		"data": [
 			{
 				"mode": "lines", 

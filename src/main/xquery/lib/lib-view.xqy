@@ -61,6 +61,11 @@ declare function lib-view:build-href($classname as xs:string, $module as xs:stri
   element a {attribute class {$classname}, attribute href{"/"||$module||"?uri="||$uri||"&amp;st="||$start-time||"&amp;host="||$host||"&amp;db="||$db}, $linktext}
 };
 
+declare function lib-view:build-href-subitem($classname as xs:string, $module as xs:string, $uri as xs:string, $start-time as xs:string, $host as xs:string, $db as xs:string, $linktext as xs:string) as element(a) {
+  xdmp:log("build-href: "||$classname||" | "||$module||" | "||$uri,"debug"),
+  element a {attribute class {$classname}, attribute href{"/"||$module||"?uri="||$uri||"&amp;st="||$start-time||"&amp;host="||$host||"&amp;db="||$db}, element i {attribute class {"fas fa-angle-right text-muted"}, " "}," "||$linktext}
+};
+
 declare function lib-view:create-chart-containers($rootname, $num) {
     for $i in 0 to $num
     return element div {attribute class {"row"}, attribute id {$rootname||$i}, " "}
@@ -129,8 +134,10 @@ declare function lib-view:nav() {
             <div class="dropdown-divider">{" "}</div>,
             <h6 class="dropdown-header">Host Level Items</h6>,
             lib-view:build-href(lib-view:is-active("host-summary.xqy", $MODULE), "host-summary.xqy", lib-view:exec-query-get-uri("host-statuses", $START-TIME, $HOST), $START-TIME, $HOST, $DATABASE, "By Host"),
-            lib-view:build-href(lib-view:is-active("xdqp-summary.xqy", $MODULE), "xdqp-summary.xqy", lib-view:exec-query-get-uri("host-statuses", $START-TIME, $HOST), $START-TIME, $HOST, $DATABASE, "XDQP Client / Server Send / Receive Metrics"),
-            lib-view:build-href(lib-view:is-active("memrss-summary.xqy", $MODULE), "memrss-summary.xqy", lib-view:exec-query-get-uri("host-statuses", $START-TIME, $HOST), $START-TIME, $HOST, $DATABASE, "Memory Resident Set Size (RSS) Metrics")
+            lib-view:build-href-subitem(lib-view:is-active("xdqp-summary.xqy", $MODULE), "xdqp-summary.xqy", lib-view:exec-query-get-uri("host-statuses", $START-TIME, $HOST), $START-TIME, $HOST, $DATABASE, "XDQP Client / Server Send / Receive Metrics"),
+            lib-view:build-href-subitem(lib-view:is-active("memrss-summary.xqy", $MODULE), "memrss-summary.xqy", lib-view:exec-query-get-uri("host-statuses", $START-TIME, $HOST), $START-TIME, $HOST, $DATABASE, "Memory Resident Set Size (RSS) Metrics"),
+            lib-view:build-href-subitem(lib-view:is-active("swap-summary.xqy", $MODULE), "swap-summary.xqy", lib-view:exec-query-get-uri("host-statuses", $START-TIME, $HOST), $START-TIME, $HOST, $DATABASE, "Memory Process Swap Size Metrics"),
+            lib-view:build-href-subitem(lib-view:is-active("swap-in-summary.xqy", $MODULE), "swap-in-summary.xqy", lib-view:exec-query-get-uri("host-statuses", $START-TIME, $HOST), $START-TIME, $HOST, $DATABASE, "Memory System Swap In Metrics")
           }
         </div>
       </li>

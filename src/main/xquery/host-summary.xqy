@@ -26,6 +26,7 @@ declare function local:process-start-times($start-times) {
                 element td {element a {attribute href {"/host.xqy?uri="||fn:base-uri($k)},$start-time}},
                 lib-view:output-td-if-available($k/m:host-status/m:total-cpu-stat-iowait),
                 lib-view:output-td-if-available($k/m:host-status/m:memory-process-size),
+                lib-view:output-td-if-available($k/m:host-status/m:memory-process-swap-size),
                 lib-view:output-td-if-available($k/m:host-status/m:memory-process-rss),
                 lib-view:output-td-if-available($k/m:host-status/m:memory-process-rss-hwm),
                 lib-view:output-td-if-available($k/m:host-status/m:memory-process-anon),
@@ -48,7 +49,7 @@ declare function local:table($start-times) {
   $i//m:list-cache-misses :)
     element table { attribute class {"table table-striped table-bordered"},
         element thead { attribute class {"thead-dark"},
-            element tr {for $i in ( "Time", "IOWait", "MPS", "RSS", "RSS-HWM", "Anon", <abbr title="Write Lock Rate">WLR</abbr>, <abbr title="User CPU Utilisation (%)">Usr</abbr>, <abbr title="System CPU Utilisation (%)">Sys</abbr>, <abbr title="System Swap-In Rate">SI</abbr>, <abbr title="System Swap-Out Rate">SO</abbr>, <abbr title="Read Lock Count">RLC</abbr>, <abbr title="Read Lock Rate">RLR</abbr>, <abbr title="Deadlock Count">DLC</abbr>, <abbr title="Deadlock Rate">DLR</abbr>) return element th {$i}}
+            element tr {for $i in ( "Time", "IOWait", "MPS", "Swap", "RSS", "RSS-HWM", "Anon", <abbr title="Write Lock Rate">WLR</abbr>, <abbr title="User CPU Utilisation (%)">Usr</abbr>, <abbr title="System CPU Utilisation (%)">Sys</abbr>, <abbr title="System Swap-In Rate">SI</abbr>, <abbr title="System Swap-Out Rate">SO</abbr>, <abbr title="Read Lock Count">RLC</abbr>, <abbr title="Read Lock Rate">RLR</abbr>, <abbr title="Deadlock Count">DLC</abbr>, <abbr title="Deadlock Rate">DLR</abbr>) return element th {$i}}
         },
     (: "Start Time", "End Time", :)
 
@@ -61,7 +62,7 @@ lib-bootstrap:create-starter-template("Host Summary: "||$lib-view:HOST,
         (   
             lib-view:nav(),
             element h3 {$lib-view:HOST},
-            lib-view:create-chart-containers("root",6),
+            lib-view:create-chart-containers("root",7),
             local:table(cts:element-values(xs:QName("m:start-time")))
         )
     ), <script src="/chart.js">{"  "}</script>
