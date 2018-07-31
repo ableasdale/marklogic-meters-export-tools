@@ -129,7 +129,8 @@ declare function lib-view:nav() {
             <div class="dropdown-divider">{" "}</div>,
             <h6 class="dropdown-header">Host Level Items</h6>,
             lib-view:build-href(lib-view:is-active("host-summary.xqy", $MODULE), "host-summary.xqy", lib-view:exec-query-get-uri("host-statuses", $START-TIME, $HOST), $START-TIME, $HOST, $DATABASE, "By Host"),
-            lib-view:build-href(lib-view:is-active("xdqp-summary.xqy", $MODULE), "xdqp-summary.xqy", lib-view:exec-query-get-uri("host-statuses", $START-TIME, $HOST), $START-TIME, $HOST, $DATABASE, "XDQP Client / Server Send / Receive Metrics")
+            lib-view:build-href(lib-view:is-active("xdqp-summary.xqy", $MODULE), "xdqp-summary.xqy", lib-view:exec-query-get-uri("host-statuses", $START-TIME, $HOST), $START-TIME, $HOST, $DATABASE, "XDQP Client / Server Send / Receive Metrics"),
+            lib-view:build-href(lib-view:is-active("memrss-summary.xqy", $MODULE), "memrss-summary.xqy", lib-view:exec-query-get-uri("host-statuses", $START-TIME, $HOST), $START-TIME, $HOST, $DATABASE, "Memory Resident Set Size (RSS) Metrics")
           }
         </div>
       </li>
