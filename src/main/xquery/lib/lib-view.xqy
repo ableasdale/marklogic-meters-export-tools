@@ -140,7 +140,9 @@ declare function lib-view:nav() {
             lib-view:build-href-subitem(lib-view:is-active("swap-summary.xqy", $MODULE), "swap-summary.xqy", lib-view:exec-query-get-uri("host-statuses", $START-TIME, $HOST), $START-TIME, $HOST, $DATABASE, "Memory Process Swap Size Metrics"),
             lib-view:build-href-subitem(lib-view:is-active("swap-in-summary.xqy", $MODULE), "swap-in-summary.xqy", lib-view:exec-query-get-uri("host-statuses", $START-TIME, $HOST), $START-TIME, $HOST, $DATABASE, "Memory System Swap In Metrics"),
             lib-view:build-href-subitem(lib-view:is-active("writelock-summary.xqy", $MODULE), "writelock-summary.xqy", lib-view:exec-query-get-uri("host-statuses", $START-TIME, $HOST), $START-TIME, $HOST, $DATABASE, "Write Lock Metrics"),
-            lib-view:build-href-subitem(lib-view:is-active("readlock-summary.xqy", $MODULE), "readlock-summary.xqy", lib-view:exec-query-get-uri("host-statuses", $START-TIME, $HOST), $START-TIME, $HOST, $DATABASE, "Read Lock Metrics")
+            lib-view:build-href-subitem(lib-view:is-active("readlock-summary.xqy", $MODULE), "readlock-summary.xqy", lib-view:exec-query-get-uri("host-statuses", $START-TIME, $HOST), $START-TIME, $HOST, $DATABASE, "Read Lock Metrics"),
+            lib-view:build-href-subitem(lib-view:is-active("query-readrate-summary.xqy", $MODULE), "query-readrate-summary.xqy", lib-view:exec-query-get-uri("host-statuses", $START-TIME, $HOST), $START-TIME, $HOST, $DATABASE, "Query Read Rate Metrics"),
+            lib-view:build-href-subitem(lib-view:is-active("cpu-summary.xqy", $MODULE), "cpu-summary.xqy", lib-view:exec-query-get-uri("host-statuses", $START-TIME, $HOST), $START-TIME, $HOST, $DATABASE, "CPU Statistics")
           }
         </div>
       </li>
