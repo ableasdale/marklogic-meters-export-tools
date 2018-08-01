@@ -7,6 +7,7 @@ var writeLockRates = new Array();
 var anonMemUsage = new Array();
 var memProcessSize = new Array();
 var memRssSize = new Array();
+var memRssHwmSize = new Array();
 var memProcessSwapSize = new Array();
 var memProcessSwapInRates = new Array();
 var xdqpClientSendRates = new Array();
@@ -14,6 +15,9 @@ var xdqpServerSendRates = new Array();
 var cpuUserStats = new Array();
 var cpuSysStats = new Array();
 var cpuIdleStats = new Array();
+var queryReadRates = new Array();
+var mergeReadRates = new Array();
+var mergeWriteRates = new Array();
 
 function pushValuesFor(dateTime) {
 	for (const x of cts.search(
@@ -36,6 +40,8 @@ function pushValuesFor(dateTime) {
 		memProcessSize.push(fn.data(memProcess));
 		var memRss = x.xpath('//*:memory-process-rss');
 		memRssSize.push(fn.data(memRss));
+		var memRssHwm = x.xpath('//*:memory-process-rss-hwm');
+		memRssHwmSize.push(fn.data(memRssHwm));
 		var memSwap = x.xpath('//*:memory-process-swap-size');
 		memProcessSwapSize.push(fn.data(memSwap));
 		var memSwapIn = x.xpath('//*:memory-system-swapin-rate');
@@ -50,6 +56,13 @@ function pushValuesFor(dateTime) {
         cpuSysStats.push(fn.data(cpuSys));
         var cpuIdle = x.xpath('//*:total-cpu-stat-idle');
 		cpuIdleStats.push(fn.data(cpuIdle));
+
+		var queryReadRate = x.xpath('//*:query-read-rate');
+		queryReadRates.push(fn.data(queryReadRate));
+		var mergeReadRate = x.xpath('//*:merge-read-rate');
+		mergeReadRates.push(fn.data(mergeReadRate));
+		var mergeWriteRate = x.xpath('//*:merge-write-rate');
+		mergeWriteRates.push(fn.data(mergeWriteRate));
 	}
 }
 
@@ -132,7 +145,13 @@ xdmp.toJSON(
 				"mode": "lines", 
 				"y": memRssSize, 
 				"x": dateTimes, 
-				"name": "mem RSS size"
+				"name": "Mem RSS size"
+			},
+			{
+				"mode": "lines", 
+				"y": memRssHwmSize, 
+				"x": dateTimes, 
+				"name": "Mem RSS HWM"
 			}
 		], 
 		"layout": {
@@ -221,6 +240,34 @@ xdmp.toJSON(
 			"width" : width,
 			"title": "CPU Statistics for host "+hostname, 
 			"yaxis": {"title": "CPU activity"}, 
+			"xaxis": {"title": "Date / Time"}
+        }
+	},
+	"9" : {
+		"data": [
+			{
+				"mode": "lines", 
+				"y": queryReadRates, 
+				"x": dateTimes, 
+				"name": "Query Read Rate"
+			},
+			{
+				"mode": "lines", 
+				"y": mergeReadRates, 
+				"x": dateTimes, 
+				"name": "Merge Read Rate"
+            },
+            {
+				"mode": "lines", 
+				"y": mergeWriteRates, 
+				"x": dateTimes, 
+				"name": "Merge Write Rate"
+            }
+		], 
+		"layout": {
+			"width" : width,
+			"title": "Query Read / Merge Read/Write Rates for host "+hostname, 
+			"yaxis": {"title": "i/o rates"}, 
 			"xaxis": {"title": "Date / Time"}
         }
 	}

@@ -18,11 +18,17 @@ function pushValuesFor(hostname, dateTime) {
 	{
 		var queryReadRate = x.xpath('//*:query-read-rate');
 		queryReadRates.push(fn.data(queryReadRate));
+		var mergeReadRate = x.xpath('//*:merge-read-rate');
+		mergeReadRates.push(fn.data(mergeReadRate));
+		var mergeWriteRate = x.xpath('//*:merge-write-rate');
+		mergeWriteRates.push(fn.data(mergeWriteRate));
 	}
 }
 
 for (let host of hosts) {
-    var queryReadRates = new Array();
+	var queryReadRates = new Array();
+	var mergeReadRates = new Array();
+	var mergeWriteRates = new Array();
     
     for (let dateTime of dateTimes) {
         pushValuesFor(host, dateTime);
@@ -31,16 +37,28 @@ for (let host of hosts) {
     var obj = {
 		"data": [
 			{
-				"mode": "lines",
+				"mode": "lines", 
 				"y": queryReadRates, 
 				"x": dateTimes, 
-				"name": "query read rates"
-			}
+				"name": "Query Read Rate"
+			},
+			{
+				"mode": "lines", 
+				"y": mergeReadRates, 
+				"x": dateTimes, 
+				"name": "Merge Read Rate"
+            },
+            {
+				"mode": "lines", 
+				"y": mergeWriteRates, 
+				"x": dateTimes, 
+				"name": "Merge Write Rate"
+            }
 		], 
 		"layout": {
 			"width" : width,
-			"title": "Query Read Rates", 
-			"yaxis": {"title": "query read rate"}, 
+			"title": "Query Read / Merge Read/Write Rates", 
+			"yaxis": {"title": "i/o rates"}, 
 			"xaxis": {"title": "Date / Time"}
         }
     };

@@ -18,11 +18,14 @@ function pushValuesFor(hostname, dateTime) {
 	{
 		var memRss = x.xpath('//*:memory-process-rss');
 		memRssSize.push(fn.data(memRss));
+		var memRssHwm = x.xpath('//*:memory-process-rss-hwm');
+		memRssHwmSize.push(fn.data(memRssHwm));
 	}
 }
 
 for (let host of hosts) {
-    var memRssSize = new Array();
+	var memRssSize = new Array();
+	var memRssHwmSize = new Array();
     
     for (let dateTime of dateTimes) {
         pushValuesFor(host, dateTime);
@@ -34,7 +37,13 @@ for (let host of hosts) {
 				"mode": "lines",
 				"y": memRssSize, 
 				"x": dateTimes, 
-				"name": "mem RSS size"
+				"name": "Mem RSS size"
+			},
+			{
+				"mode": "lines", 
+				"y": memRssHwmSize, 
+				"x": dateTimes, 
+				"name": "Mem RSS HWM"
 			}
 		], 
 		"layout": {
