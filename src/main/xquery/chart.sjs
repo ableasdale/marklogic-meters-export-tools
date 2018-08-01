@@ -18,6 +18,8 @@ var cpuIdleStats = new Array();
 var queryReadRates = new Array();
 var mergeReadRates = new Array();
 var mergeWriteRates = new Array();
+var memPageInRates = new Array();
+var memPageOutRates = new Array();
 
 function pushValuesFor(dateTime) {
 	for (const x of cts.search(
@@ -63,6 +65,11 @@ function pushValuesFor(dateTime) {
 		mergeReadRates.push(fn.data(mergeReadRate));
 		var mergeWriteRate = x.xpath('//*:merge-write-rate');
 		mergeWriteRates.push(fn.data(mergeWriteRate));
+
+		var memPageInRate = x.xpath('//*:memory-system-pagein-rate');
+		memPageInRates.push(fn.data(memPageInRate));
+		var memPageOutRate = x.xpath('//*:memory-system-pageout-rate'); 
+		memPageOutRates.push(fn.data(memPageOutRate));
 	}
 }
 
@@ -130,6 +137,24 @@ xdmp.toJSON(
 				"y": memProcessSize, 
 				"x": dateTimes, 
 				"name": "mem process size"
+			},
+			{
+				"mode": "lines", 
+				"y": anonMemUsage, 
+				"x": dateTimes, 
+				"name": "anon mem"
+			},
+			{
+				"mode": "lines", 
+				"y": memRssSize, 
+				"x": dateTimes, 
+				"name": "Mem RSS size"
+			},
+			{
+				"mode": "lines", 
+				"y": memRssHwmSize, 
+				"x": dateTimes, 
+				"name": "Mem RSS HWM"
 			}
 		], 
 		"layout": {
@@ -270,6 +295,29 @@ xdmp.toJSON(
 			"yaxis": {"title": "i/o rates"}, 
 			"xaxis": {"title": "Date / Time"}
         }
+	},
+	"10" : {
+		"data": [
+			{
+				"mode": "lines", 
+				"y": memPageInRates, 
+				"x": dateTimes, 
+				"name": "Memory Page In Rate"
+			},
+			{
+				"mode": "lines", 
+				"y": memPageOutRates, 
+				"x": dateTimes, 
+				"name": "Memory Page Out Rate"
+            }
+		], 
+		"layout": {
+			"width" : width,
+			"title": "Memory Page In/Out Rates for host "+hostname, 
+			"yaxis": {"title": "mem i/o rates"}, 
+			"xaxis": {"title": "Date / Time"}
+        }
+
 	}
 });
 

@@ -44,7 +44,8 @@ declare function local:process-start-times($start-times) {
                 lib-view:output-td-if-available($k/m:host-status/m:read-lock-count),
                 lib-view:output-td-if-available($k/m:host-status/m:read-lock-rate),
                 lib-view:output-td-if-available($k/m:host-status/m:deadlock-count),
-                lib-view:output-td-if-available($k/m:host-status/m:deadlock-rate)
+                lib-view:output-td-if-available($k/m:host-status/m:deadlock-rate),
+                lib-view:output-td-if-available($k/m:host-status/m:host-size)
                 (: element td {fn:string($k/m:host-status/m:memory-process-size) || " / " || fn:string($k//m:host-statuses/m:host-status/m:memory-process-rss)}:)
             }
     }
@@ -56,7 +57,7 @@ declare function local:table($start-times) {
     element table { attribute class {"table table-striped table-bordered"},
         element thead { attribute class {"thead-dark"},
             element tr {for $i in ( "Time", "IOWait", "MPS", "Swap", "RSS", "RSS-HWM", "Anon", <abbr title="Write Lock Rate">WLR</abbr>, <abbr title="User CPU Utilisation (%)">Usr</abbr>, <abbr title="System CPU Utilisation (%)">Sys</abbr>, <abbr title="System CPU Nice">Ni</abbr>, 
-            <abbr title="System Page-In Rate">PI</abbr>, <abbr title="System Page-Out Rate">PO</abbr>, <abbr title="System Swap-In Rate">SI</abbr>, <abbr title="System Swap-Out Rate">SO</abbr>, <abbr title="Query Read Rate">QRR</abbr>, <abbr title="Merge Read Rate">MRR</abbr>, <abbr title="Merge Write Rate">MWR</abbr>, <abbr title="Read Lock Count">RLC</abbr>, <abbr title="Read Lock Rate">RLR</abbr>, <abbr title="Deadlock Count">DLC</abbr>, <abbr title="Deadlock Rate">DLR</abbr>) return element th {$i}}
+            <abbr title="System Page-In Rate">PI</abbr>, <abbr title="System Page-Out Rate">PO</abbr>, <abbr title="System Swap-In Rate">SI</abbr>, <abbr title="System Swap-Out Rate">SO</abbr>, <abbr title="Query Read Rate">QRR</abbr>, <abbr title="Merge Read Rate">MRR</abbr>, <abbr title="Merge Write Rate">MWR</abbr>, <abbr title="Read Lock Count">RLC</abbr>, <abbr title="Read Lock Rate">RLR</abbr>, <abbr title="Deadlock Count">DLC</abbr>, <abbr title="Deadlock Rate">DLR</abbr>, <abbr title="Host Size">HS</abbr>) return element th {$i}}
         },
     (: "Start Time", "End Time", :)
 
@@ -69,7 +70,7 @@ lib-bootstrap:create-starter-template("Host Summary: "||$lib-view:HOST,
         (   
             lib-view:nav(),
             element h3 {$lib-view:HOST},
-            lib-view:create-chart-containers("root",9),
+            lib-view:create-chart-containers("root",10),
             local:table(cts:element-values(xs:QName("m:start-time")))
         )
     ), <script src="/chart.js">{"  "}</script>
