@@ -134,10 +134,13 @@ declare function lib-view:nav() {
             <div class="dropdown-divider">{" "}</div>,
             <h6 class="dropdown-header">Host Level Items</h6>,
             lib-view:build-href(lib-view:is-active("host-summary.xqy", $MODULE), "host-summary.xqy", lib-view:exec-query-get-uri("host-statuses", $START-TIME, $HOST), $START-TIME, $HOST, $DATABASE, "By Host"),
+            <h6 class="dropdown-header">Across the cluster</h6>,
             lib-view:build-href-subitem(lib-view:is-active("xdqp-summary.xqy", $MODULE), "xdqp-summary.xqy", lib-view:exec-query-get-uri("host-statuses", $START-TIME, $HOST), $START-TIME, $HOST, $DATABASE, "XDQP Client / Server Send / Receive Metrics"),
             lib-view:build-href-subitem(lib-view:is-active("memrss-summary.xqy", $MODULE), "memrss-summary.xqy", lib-view:exec-query-get-uri("host-statuses", $START-TIME, $HOST), $START-TIME, $HOST, $DATABASE, "Memory Resident Set Size (RSS) Metrics"),
             lib-view:build-href-subitem(lib-view:is-active("swap-summary.xqy", $MODULE), "swap-summary.xqy", lib-view:exec-query-get-uri("host-statuses", $START-TIME, $HOST), $START-TIME, $HOST, $DATABASE, "Memory Process Swap Size Metrics"),
-            lib-view:build-href-subitem(lib-view:is-active("swap-in-summary.xqy", $MODULE), "swap-in-summary.xqy", lib-view:exec-query-get-uri("host-statuses", $START-TIME, $HOST), $START-TIME, $HOST, $DATABASE, "Memory System Swap In Metrics")
+            lib-view:build-href-subitem(lib-view:is-active("swap-in-summary.xqy", $MODULE), "swap-in-summary.xqy", lib-view:exec-query-get-uri("host-statuses", $START-TIME, $HOST), $START-TIME, $HOST, $DATABASE, "Memory System Swap In Metrics"),
+            lib-view:build-href-subitem(lib-view:is-active("writelock-summary.xqy", $MODULE), "writelock-summary.xqy", lib-view:exec-query-get-uri("host-statuses", $START-TIME, $HOST), $START-TIME, $HOST, $DATABASE, "Write Lock Metrics"),
+            lib-view:build-href-subitem(lib-view:is-active("readlock-summary.xqy", $MODULE), "readlock-summary.xqy", lib-view:exec-query-get-uri("host-statuses", $START-TIME, $HOST), $START-TIME, $HOST, $DATABASE, "Read Lock Metrics")
           }
         </div>
       </li>
