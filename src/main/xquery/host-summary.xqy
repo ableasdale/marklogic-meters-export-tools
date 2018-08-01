@@ -33,6 +33,9 @@ declare function local:process-start-times($start-times) {
                 lib-view:output-td-if-available($k/m:host-status/m:write-lock-rate),
                 lib-view:output-td-if-available($k/m:host-status/m:total-cpu-stat-user),
                 lib-view:output-td-if-available($k/m:host-status/m:total-cpu-stat-system),
+                lib-view:output-td-if-available($k/m:host-status/m:total-cpu-stat-nice),
+                lib-view:output-td-if-available($k/m:host-status/m:memory-system-pagein-rate),
+                lib-view:output-td-if-available($k/m:host-status/m:memory-system-pageout-rate),
                 lib-view:output-td-if-available($k/m:host-status/m:memory-system-swapin-rate),
                 lib-view:output-td-if-available($k/m:host-status/m:memory-system-swapout-rate),
                 lib-view:output-td-if-available($k/m:host-status/m:query-read-rate),
@@ -50,7 +53,8 @@ declare function local:table($start-times) {
   $i//m:list-cache-misses :)
     element table { attribute class {"table table-striped table-bordered"},
         element thead { attribute class {"thead-dark"},
-            element tr {for $i in ( "Time", "IOWait", "MPS", "Swap", "RSS", "RSS-HWM", "Anon", <abbr title="Write Lock Rate">WLR</abbr>, <abbr title="User CPU Utilisation (%)">Usr</abbr>, <abbr title="System CPU Utilisation (%)">Sys</abbr>, <abbr title="System Swap-In Rate">SI</abbr>, <abbr title="System Swap-Out Rate">SO</abbr>, <abbr title="Query Read Rate">QRR</abbr>, <abbr title="Read Lock Count">RLC</abbr>, <abbr title="Read Lock Rate">RLR</abbr>, <abbr title="Deadlock Count">DLC</abbr>, <abbr title="Deadlock Rate">DLR</abbr>) return element th {$i}}
+            element tr {for $i in ( "Time", "IOWait", "MPS", "Swap", "RSS", "RSS-HWM", "Anon", <abbr title="Write Lock Rate">WLR</abbr>, <abbr title="User CPU Utilisation (%)">Usr</abbr>, <abbr title="System CPU Utilisation (%)">Sys</abbr>, <abbr title="System CPU Nice">Ni</abbr>, 
+            <abbr title="System Page-In Rate">PI</abbr>, <abbr title="System Page-Out Rate">PO</abbr>, <abbr title="System Swap-In Rate">SI</abbr>, <abbr title="System Swap-Out Rate">SO</abbr>, <abbr title="Query Read Rate">QRR</abbr>, <abbr title="Read Lock Count">RLC</abbr>, <abbr title="Read Lock Rate">RLR</abbr>, <abbr title="Deadlock Count">DLC</abbr>, <abbr title="Deadlock Rate">DLR</abbr>) return element th {$i}}
         },
     (: "Start Time", "End Time", :)
 
