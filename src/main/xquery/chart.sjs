@@ -11,6 +11,9 @@ var memProcessSwapSize = new Array();
 var memProcessSwapInRates = new Array();
 var xdqpClientSendRates = new Array();
 var xdqpServerSendRates = new Array();
+var cpuUserStats = new Array();
+var cpuSysStats = new Array();
+var cpuIdleStats = new Array();
 
 function pushValuesFor(dateTime) {
 	for (const x of cts.search(
@@ -41,6 +44,12 @@ function pushValuesFor(dateTime) {
 		xdqpClientSendRates.push(fn.data(clientSend));
 		var serverSend = x.xpath('//*:xdqp-server-send-rate');
 		xdqpServerSendRates.push(fn.data(serverSend));
+		var cpuUser = x.xpath('//*:total-cpu-stat-user');
+        cpuUserStats.push(fn.data(cpuUser));
+		var cpuSys = x.xpath('//*:total-cpu-stat-system');
+        cpuSysStats.push(fn.data(cpuSys));
+        var cpuIdle = x.xpath('//*:total-cpu-stat-idle');
+		cpuIdleStats.push(fn.data(cpuIdle));
 	}
 }
 
@@ -186,6 +195,34 @@ xdmp.toJSON(
 			"yaxis": {"title": "xdqp rates"}, 
 			"xaxis": {"title": "Date / Time"}
 		}
+	},
+	"8" : {
+		"data": [
+			{
+				"mode": "lines", 
+				"y": cpuUserStats, 
+				"x": dateTimes, 
+				"name": "CPU %User"
+			},
+			{
+				"mode": "lines", 
+				"y": cpuSysStats, 
+				"x": dateTimes, 
+				"name": "CPU %Sys"
+            },
+            {
+				"mode": "lines", 
+				"y": cpuIdleStats, 
+				"x": dateTimes, 
+				"name": "CPU Idle"
+            }
+		], 
+		"layout": {
+			"width" : width,
+			"title": "CPU Statistics for host "+hostname, 
+			"yaxis": {"title": "CPU activity"}, 
+			"xaxis": {"title": "Date / Time"}
+        }
 	}
 });
 

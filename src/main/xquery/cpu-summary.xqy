@@ -12,13 +12,13 @@ declare function local:process-times-for-host($i, $pos) {
     element div {attribute class {"row"}, attribute id {"root"||$pos}, " "}
 };
 
-lib-bootstrap:create-starter-template("Query Read Rate Metrics",
+lib-bootstrap:create-starter-template("CPU Statistics",
     lib-bootstrap:bootstrap-container(
         (   
             lib-view:nav(),
-            element h3 {"Query Read Rate Metrics"},
+            element h3 {"CPU Statistics"},
             for $i at $pos in cts:element-values(xs:QName("m:host-name"))
             return local:process-times-for-host($i, ($pos - 1))
         )
-    ), <script src="/query-readrate-summary.js">{"  "}</script>
+    ), <script src="/cpu-summary.js">{"  "}</script>
 )
