@@ -10,6 +10,11 @@ declare namespace xdmp = "http://marklogic.com/xdmp";
 declare variable $first-start-datetime := cts:element-values(xs:QName("m:start-time"), (), ("ascending", "limit=1"));
 declare variable $last-start-datetime := cts:element-values(xs:QName("m:start-time"), (), ("descending", "limit=1"));
 
+declare function local:hourly-reports(){
+    for $i in cts:element-values(xs:QName("m:start-time"), (), (), cts:element-value-query(xs:QName("m:period"), "hour"))
+    return element a {attribute href {"/hourly-reports.xqy?st="||$i}, $i}
+};
+
 declare function local:create-groups() {
     for $i in 1 to fn:hours-from-duration($last-start-datetime - $first-start-datetime) + 1
     (: let $step := "PT"||$i||"H" :)
@@ -31,8 +36,8 @@ declare function local:create-groups() {
 lib-bootstrap:create-starter-template("Start times",
     lib-bootstrap:bootstrap-container(
         (   lib-view:nav(),
-            element h3 {"Hourly"},
-            element p {"TODO"},
+            element h3 {"Hourly Reports"},
+            local:hourly-reports(),
             element h3 {"Start Times"},
             element div {
                 attribute class {"row"},
