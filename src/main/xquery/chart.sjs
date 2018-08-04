@@ -20,6 +20,7 @@ var mergeReadRates = new Array();
 var mergeWriteRates = new Array();
 var memPageInRates = new Array();
 var memPageOutRates = new Array();
+var xdqpServerRequestTimeRates = new Array();
 
 function pushValuesFor(dateTime) {
 	for (const x of cts.search(
@@ -70,6 +71,9 @@ function pushValuesFor(dateTime) {
 		memPageInRates.push(fn.data(memPageInRate));
 		var memPageOutRate = x.xpath('//*:memory-system-pageout-rate'); 
 		memPageOutRates.push(fn.data(memPageOutRate));
+
+		var xdqpServerRequestTime = x.xpath('//*:xdqp-server-request-time');
+		xdqpServerRequestTimeRates.push(fn.data(xdqpServerRequestTime));
 	}
 }
 
@@ -315,6 +319,22 @@ xdmp.toJSON(
 			"width" : width,
 			"title": "Memory Page In/Out Rates for host "+hostname, 
 			"yaxis": {"title": "mem i/o rates"}, 
+			"xaxis": {"title": "Date / Time"}
+        }
+	},
+	"11" : {
+		"data": [
+			{
+				"mode": "lines", 
+				"y": xdqpServerRequestTimeRates, 
+				"x": dateTimes, 
+				"name": "XDQP Server Request Time"
+			}
+		], 
+		"layout": {
+			"width" : width,
+			"title": "XDQP Server Request Time Rates for host "+hostname, 
+			"yaxis": {"title": "xdqp req time"}, 
 			"xaxis": {"title": "Date / Time"}
         }
 

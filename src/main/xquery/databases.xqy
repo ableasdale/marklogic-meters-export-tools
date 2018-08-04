@@ -15,7 +15,7 @@ declare function local:back-link() {
     let $start-time := cts:element-values(xs:QName("m:start-time"), fn:data($doc/m:database-statuses/m:period-start-time), ("descending", "limit=2"))[2]
     let $prev-doc := cts:search(doc()/m:database-statuses, lib-view:and-query($start-time, $lib-view:HOST))
     return if (not(empty($start-time)))
-    then(lib-view:build-href("prev-link", $lib-view:MODULE, fn:base-uri($prev-doc), fn:string($start-time), $lib-view:HOST, "<"))
+    then(lib-view:build-href("prev-link", $lib-view:MODULE, fn:base-uri($prev-doc), fn:string($start-time), $lib-view:HOST, $lib-view:DATABASE, "<"))
     else("<")
 };
 
@@ -23,7 +23,7 @@ declare function local:next-link() {
     let $start-time := cts:element-values(xs:QName("m:start-time"), fn:data($doc/m:database-statuses/m:period-start-time), ("ascending", "limit=2"))[2]
     let $next-doc := cts:search(doc()/m:database-statuses, lib-view:and-query($start-time, $lib-view:HOST))
     return if (not(empty($start-time)))
-    then(lib-view:build-href("next-link", $lib-view:MODULE, fn:base-uri($next-doc), fn:string($start-time), $lib-view:HOST, ">"))
+    then(lib-view:build-href("next-link", $lib-view:MODULE, fn:base-uri($next-doc), fn:string($start-time), $lib-view:HOST, $lib-view:DATABASE, ">"))
     else(">")
 };
 
