@@ -29,12 +29,10 @@ declare function local:next-link() {
 
 
 declare function local:table($i) {
-(:$i//m:start-time,
-  $i//m:list-cache-hits,
-  $i//m:list-cache-misses :)
+(: <abbr title="Fragments (Active / Deleted)">F (A/D)</abbr> :)
     element table { attribute class {"table table-striped table-bordered"},
         element thead { attribute class {"thead-dark"},
-        element tr {for $i in ( "Name", "Rate", "ETC Hits", "ETC Misses", "Threads", "Req. Time", "Queue Size", "Fragments [A/D]") return element th {$i}}
+        element tr {for $i in ( "Name", "Rate", "ETC Hits", "ETC Misses", "Threads", "Req. Time", "Queue Size") return element th {$i}}
         },
     (: "Start Time", "End Time", :)
 

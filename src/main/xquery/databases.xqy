@@ -33,7 +33,7 @@ declare function local:process-row($i) {
   $i//m:list-cache-misses :)
     element table { attribute class {"table table-striped table-bordered"},
         element thead { attribute class {"thead-dark"},
-        element tr {for $i in ( "Name", <abbr title="Nonblocking Timestamp">NBT</abbr>, <abbr title="Active Fragment Count">AFC</abbr>, <abbr title="Deleted Fragment Count">DFC</abbr>, <abbr title="List Cache Hits / Rate">LCH</abbr>, <abbr title="List Cache Misses / Rate">LCM</abbr>, <abbr title="Compressed Tree Cache Hits / Rate">CTCH</abbr>, <abbr title="Compressed Tree Cache Misses / Rate">CTCM</abbr>, <abbr title="Deadlock Count / Rate">DLC</abbr>, <abbr title="Write Lock Count / Rate">WLC</abbr>, "Fragments [A/D]") return element th {$i}}
+        element tr {for $i in ( "Name", <abbr title="Nonblocking Timestamp">NBT</abbr>, <abbr title="Active Fragment Count">AFC</abbr>, <abbr title="Deleted Fragment Count">DFC</abbr>, <abbr title="List Cache Hits / Rate">LCH</abbr>, <abbr title="List Cache Misses / Rate">LCM</abbr>, <abbr title="Compressed Tree Cache Hits / Rate">CTCH</abbr>, <abbr title="Compressed Tree Cache Misses / Rate">CTCM</abbr>, <abbr title="Deadlock Count / Rate">DLC</abbr>, <abbr title="Write Lock Count / Rate">WLC</abbr>, <abbr title="Fragments (Active / Deleted)">F (A/D)</abbr>) return element th {$i}}
         },
 (: 
         , <abbr title="User CPU Utilisation (%)">Usr</abbr>, <abbr title="System CPU Utilisation (%)">Sys</abbr>, <abbr title="System Swap-In Rate">SI</abbr>, <abbr title="System Swap-Out Rate">SO</abbr>, <abbr title="Read Lock Count">RLC</abbr>, <abbr title="Read Lock Rate">RLR</abbr>, <abbr title="Deadlock Count">DLC</abbr>, <abbr title="Deadlock Rate">DLR</abbr>
@@ -59,7 +59,8 @@ declare function local:process-forest-status-elements($i) {
                 element td {fn:string($j/m:master-aggregate/m:compressed-tree-cache-hits) || " / " || fn:string($j/m:master-aggregate/m:compressed-tree-cache-hit-rate)},
                 element td {fn:string($j/m:master-aggregate/m:compressed-tree-cache-misses) || " / " || fn:string($j/m:master-aggregate/m:compressed-tree-cache-miss-rate)},
                 element td {fn:string($j/m:master-aggregate/m:deadlock-count) || " / " || fn:string($j/m:master-aggregate/m:deadlock-rate)},
-                element td {fn:string($j/m:master-aggregate/m:write-lock-count) || " / " || fn:string($j/m:master-aggregate/m:write-lock-rate)}
+                element td {fn:string($j/m:master-aggregate/m:write-lock-count) || " / " || fn:string($j/m:master-aggregate/m:write-lock-rate)},
+                element td {fn:string($j/m:master-aggregate/m:active-fragment-count) || " / " || fn:string($j/m:master-aggregate/m:deleted-fragment-count)}
                 (: || " / " || fn:string($j/m:memory-process-rss)} :)
                 (:
                 element td {fn:string($j/m:list-cache-misses) },
