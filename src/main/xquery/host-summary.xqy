@@ -7,6 +7,15 @@ declare namespace m = "http://marklogic.com/manage/meters";
 declare namespace cts = "http://marklogic.com/cts";
 declare namespace xdmp = "http://marklogic.com/xdmp";
 
+declare function local:memory-process-range() {
+    cts:element-values(xs:QName("m:memory-process-size"), (), (), 
+        cts:and-query((
+            cts:element-value-query(xs:QName("m:period"), "raw"),
+            cts:element-value-query(xs:QName("m:host-name"), $lib-view:HOST)
+        ))
+    )
+};
+
 declare function local:get-doc-for-time($start-time){
     cts:search(doc()/m:host-statuses,
         cts:and-query((
@@ -72,6 +81,7 @@ lib-bootstrap:create-starter-template("Host Summary: "||$lib-view:HOST,
         (   
             lib-view:nav(),
             element h3 {$lib-view:HOST},
+            element p {"Minimum memory-process-size: "||fn:min(local:memory-process-range()) ||" / Maximum memory-process-size: "|| fn:max(local:memory-process-range())},
             lib-view:create-chart-containers("root",11),
             local:table(cts:element-values(xs:QName("m:start-time")))
             (: local:table(cts:element-values(xs:QName("m:start-time"), "2018-07-30T02:30:00", ("limit=15"))) :)

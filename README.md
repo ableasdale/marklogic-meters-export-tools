@@ -16,7 +16,11 @@ collation: http://marklogic.com/collation/
 
 scalar type: dateTime
 namespace uri: http://marklogic.com/manage/meters
-start-time
+localname: start-time
+
+scalar type: unsignedLong
+namespace uri: http://marklogic.com/manage/meters
+localname: memory-process-size
 
 ## Export
 
