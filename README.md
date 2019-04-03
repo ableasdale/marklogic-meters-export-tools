@@ -9,6 +9,7 @@ Create app server with the path:
 
 ### Element range indexes
 
+```
 scalar type: string
 namespace uri: http://marklogic.com/manage/meters
 localnames: host-name, database-name
@@ -21,6 +22,7 @@ localname: start-time
 scalar type: unsignedLong
 namespace uri: http://marklogic.com/manage/meters
 localname: memory-process-size
+```
 
 ## Export
 
@@ -28,5 +30,6 @@ https://help.marklogic.com/knowledgebase/article/View/530/0/exporting-metering-d
 
 ## Importing the data (using MLCP)
 
+```bash
  mlcp-9.0.7/bin/mlcp.sh import -host localhost -port 8000 -database Meters -username username -password password -input_file_path /path/to/your/metersData/ -input_file_type documents -input_compressed true -mode local -thread_count 10 -batch_size 10
-
+```

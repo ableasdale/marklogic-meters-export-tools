@@ -24,6 +24,7 @@ declare function lib-bootstrap:create-starter-template($title as xs:string, $con
         </head>
         <body>
             {$content}
+            
             <!-- jQuery first, then Popper.js, then Bootstrap JS -->
             <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">{" "}</script>
             <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous">{" "}</script>
@@ -33,7 +34,7 @@ declare function lib-bootstrap:create-starter-template($title as xs:string, $con
             <script src="https://cdn.plot.ly/plotly-latest.min.js">{" "}</script>
             <script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin="anonymous">{" "}</script>
             <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin="anonymous">{" "}</script>
-            <script crossorigin="anonymous" src="https://unpkg.com/react-plotly.js@latest/dist/create-plotly-component.js">{" "}</script>
+            <script crossorigin="anonymous" src="https://unpkg.com/react-plotly.js@2.2.0/dist/create-plotly-component.js">{" "}</script>
             <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.5.0/d3.min.js">{" "}</script>
 
             <!-- Optional JavaScript -->
